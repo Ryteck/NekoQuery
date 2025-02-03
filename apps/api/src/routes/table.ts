@@ -4,6 +4,7 @@ import TableRepository from "../repositories/Table";
 const tableSchema = t.Object({
 	id: t.String(),
 	name: t.String(),
+	databaseConnectionId: t.String(),
 });
 
 export const tableRoute = new Elysia({
@@ -11,28 +12,34 @@ export const tableRoute = new Elysia({
 	detail: { tags: ["Table"] },
 })
 
-	.decorate("repository", new TableRepository())
+	.decorate("tableRepository", new TableRepository())
 
-	.get("/", ({ repository }) => repository.index(), {
+	.get("/", ({ tableRepository }) => tableRepository.index(), {
 		response: t.Array(tableSchema),
 	})
 
-	.get("/:id", ({ repository, params }) => repository.find(params.id), {
-		response: tableSchema,
-	})
+	.get(
+		"/:id",
+		({ tableRepository, params }) => tableRepository.find(params.id),
+		{
+			response: tableSchema,
+		},
+	)
 
 	.post(
 		"/",
-		({ set, repository, body }) => {
+		({ set, tableRepository, body }) => {
 			set.status = 201;
 
-			return repository.store({
+			return tableRepository.store({
 				name: body.name,
+				databaseConnectionId: body.databaseConnectionId,
 			});
 		},
 		{
 			body: t.Object({
 				name: t.String(),
+				databaseConnectionId: t.String(),
 			}),
 			response: tableSchema,
 		},
@@ -40,8 +47,8 @@ export const tableRoute = new Elysia({
 
 	.put(
 		"/:id",
-		({ repository, params, body }) =>
-			repository.update(params.id, {
+		({ tableRepository, params, body }) =>
+			tableRepository.update(params.id, {
 				name: body.name,
 			}),
 		{
@@ -52,6 +59,10 @@ export const tableRoute = new Elysia({
 		},
 	)
 
-	.delete("/:id", ({ repository, params: { id } }) => repository.destroy(id), {
-		response: tableSchema,
-	});
+	.delete(
+		"/:id",
+		({ tableRepository, params: { id } }) => tableRepository.destroy(id),
+		{
+			response: tableSchema,
+		},
+	);

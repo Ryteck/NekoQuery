@@ -10,15 +10,19 @@ export default class TableRepository extends RepositoryDomain {
 		return this.prismaClient.table.findUniqueOrThrow({ where: { id } });
 	}
 
-	store({ name }: Omit<Table, "id">): Promise<Table> {
+	store({ name, databaseConnectionId }: Omit<Table, "id">): Promise<Table> {
 		return this.prismaClient.table.create({
 			data: {
 				name,
+				databaseConnectionId,
 			},
 		});
 	}
 
-	update(id: string, { name }: Partial<Omit<Table, "id">>): Promise<Table> {
+	update(
+		id: string,
+		{ name }: Partial<Omit<Table, "id" | "databaseConnectionId">>,
+	): Promise<Table> {
 		return this.prismaClient.table.update({
 			where: { id },
 			data: {

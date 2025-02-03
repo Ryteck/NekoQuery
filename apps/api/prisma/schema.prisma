@@ -10,9 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Table {
+model DatabaseConnection {
   id   String @id @default(ulid())
   name String @unique
+  url  String
 
+  tables Table[]
+
+  @@map("database_connections")
+}
+
+model Table {
+  id   String @id @default(ulid())
+  name String
+
+  databaseConnectionId String             @map("database_connection_id")
+  databaseConnection   DatabaseConnection @relation(fields: databaseConnectionId, references: id, onDelete: Cascade)
+
+  @@unique([name, databaseConnectionId])
   @@map("tables")
 }
