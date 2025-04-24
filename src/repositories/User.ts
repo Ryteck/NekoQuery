@@ -26,6 +26,10 @@ export default class UserRepository extends Repository {
 		return this.prismaClient.user.findUniqueOrThrow({ where: { id } });
 	}
 
+	public showByEmail(email: string): Promise<User> {
+		return this.prismaClient.user.findUniqueOrThrow({ where: { email } });
+	}
+
 	public update(
 		id: string,
 		{ name, email, publicKey }: Partial<Omit<User, "id" | "password">>,
