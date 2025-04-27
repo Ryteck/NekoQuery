@@ -1,7 +1,7 @@
 import { t } from "elysia";
 import type { AppContext } from "../app";
-import type { PayloadSchema } from "../schemas/payload";
-import { userTypeBoxSchema } from "../schemas/user";
+import userTypeBoxSchema from "../schemas/typeBox/user";
+import type { PayloadSchema } from "../schemas/zod/payload";
 
 export const registerAuthRoute = (app: AppContext) =>
 	app.group(
@@ -20,14 +20,9 @@ export const registerAuthRoute = (app: AppContext) =>
 					async ({ body: { email, password }, userRepository, jwt }) => {
 						const user = await userRepository.showByEmail(email);
 
-						const isCorrectPassword = await Bun.password.verify(
-							password,
-							user.password,
-						);
+						await user.validatePassword(password);
 
-						if (!isCorrectPassword) throw new Error("Wrong Password");
-
-						const payload: PayloadSchema = { userId: user.id };
+						const payload: PayloadSchema = { userId: user.render().id };
 
 						return jwt.sign(payload);
 					},
@@ -48,10 +43,10 @@ export const registerAuthRoute = (app: AppContext) =>
 				.get(
 					"/session",
 					async ({ user }) => {
-						return user || null;
+						return user?.render() || null;
 					},
 					{
-						response: t.Nullable(userTypeBoxSchema),
+						response: t.Nullable(t.Omit(userTypeBoxSchema, ["password"])),
 
 						detail: {
 							summary: "Get Current Session",

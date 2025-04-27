@@ -1,50 +1,68 @@
 import Repository from "../domain/Repository";
+import UserEntity from "../entities/User";
 import type { User } from "../generated/prisma";
 
+type StoreUserData = Omit<User, "id">;
+type UpdateUserData = Partial<Omit<StoreUserData, "password">>;
+
 export default class UserRepository extends Repository {
-	public list(): Promise<Array<User>> {
-		return this.prismaClient.user.findMany();
+	public async list(): Promise<Array<UserEntity>> {
+		const databaseUsers = await this.prismaClient.user.findMany();
+
+		return databaseUsers.map((user) => new UserEntity(user));
 	}
 
-	public store({
+	public async store({
 		name,
 		email,
 		password,
 		publicKey,
-	}: Omit<User, "id">): Promise<User> {
-		return this.prismaClient.user.create({
+	}: StoreUserData): Promise<UserEntity> {
+		const passwordHash = await UserEntity.generatePasswordHash(password);
+
+		const databaseUser = await this.prismaClient.user.create({
 			data: {
 				name,
 				email,
-				password,
+				password: passwordHash,
 				publicKey,
 			},
 		});
+
+		return new UserEntity(databaseUser);
 	}
 
-	public show(id: string): Promise<User> {
-		return this.prismaClient.user.findUniqueOrThrow({ where: { id } });
-	}
-
-	public showByEmail(email: string): Promise<User> {
-		return this.prismaClient.user.findUniqueOrThrow({ where: { email } });
-	}
-
-	public update(
-		id: string,
-		{ name, email, publicKey }: Partial<Omit<User, "id" | "password">>,
-	): Promise<User> {
-		return this.prismaClient.user.update({
+	public async show(id: string): Promise<UserEntity> {
+		const databaseUser = await this.prismaClient.user.findUniqueOrThrow({
 			where: { id },
-			data: {
-				name,
-				email,
-				publicKey,
-			},
 		});
+
+		return new UserEntity(databaseUser);
 	}
 
-	public destroy(id: string): Promise<User> {
-		return this.prismaClient.user.delete({ where: { id } });
+	public async showByEmail(email: string): Promise<UserEntity> {
+		const databaseUser = await this.prismaClient.user.findUniqueOrThrow({
+			where: { email },
+		});
+
+		return new UserEntity(databaseUser);
+	}
+
+	public async update(
+		id: string,
+		{ name, email, publicKey }: UpdateUserData,
+	): Promise<UserEntity> {
+		const databaseUser = await this.prismaClient.user.update({
+			where: { id },
+			data: { name, email, publicKey },
+		});
+
+		return new UserEntity(databaseUser);
+	}
+
+	public async destroy(id: string): Promise<UserEntity> {
+		const databaseUser = await this.prismaClient.user.delete({ where: { id } });
+
+		return new UserEntity(databaseUser);
 	}
 }

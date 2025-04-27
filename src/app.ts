@@ -1,14 +1,18 @@
 import jwt from "@elysiajs/jwt";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
+import ProjectRepository from "./repositories/Project";
+import TeamRepository from "./repositories/Team";
 import UserRepository from "./repositories/User";
-import payloadSchema from "./schemas/payload";
+import payloadSchema from "./schemas/zod/payload";
 import { JWT_SECRET } from "./services/environment";
 
 const app = new Elysia()
 
-	// Instance user repository
+	// Instance repositories
 	.decorate("userRepository", new UserRepository())
+	.decorate("teamRepository", new TeamRepository())
+	.decorate("projectRepository", new ProjectRepository())
 
 	// Swagger Plugin
 	.use(
@@ -28,6 +32,16 @@ const app = new Elysia()
 						name: "User",
 						description:
 							"Endpoints related to user management, including registration, authentication, profile updates, and user information retrieval.",
+					},
+					{
+						name: "Team",
+						description:
+							"Endpoints for team management, covering creation, retrieval, updating, and association of teams with users.",
+					},
+					{
+						name: "Project",
+						description:
+							"Endpoints for project management, including project creation, listing, updating, and team association.",
 					},
 				],
 				components: {

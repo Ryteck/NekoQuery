@@ -1,6 +1,6 @@
 import { t } from "elysia";
 import type { AppContext } from "../app";
-import { userTypeBoxSchema } from "../schemas/user";
+import userTypeBoxSchema from "../schemas/typeBox/user";
 
 export const registerUserRoute = (app: AppContext) =>
 	app.group(
@@ -15,26 +15,33 @@ export const registerUserRoute = (app: AppContext) =>
 			app
 
 				// List Users
-				.get("/", ({ userRepository }) => userRepository.list(), {
-					response: t.Array(userTypeBoxSchema),
-
-					detail: {
-						summary: "List Users",
-						description: "Retrieve a list of all registered users.",
+				.get(
+					"/",
+					async ({ userRepository }) => {
+						const userEntities = await userRepository.list();
+						return userEntities.map((userEntity) => userEntity.render());
 					},
-				})
+					{
+						response: t.Array(t.Omit(userTypeBoxSchema, ["password"])),
+
+						detail: {
+							summary: "List Users",
+							description: "Retrieve a list of all registered users.",
+						},
+					},
+				)
 
 				// Create User
 				.post(
 					"/",
 					async ({ body, userRepository }) => {
-						body.password = await Bun.password.hash(body.password);
-						return userRepository.store(body);
+						const userEntity = await userRepository.store(body);
+						return userEntity.render();
 					},
 					{
 						body: t.Omit(userTypeBoxSchema, ["id"]),
 
-						response: userTypeBoxSchema,
+						response: t.Omit(userTypeBoxSchema, ["password"]),
 
 						detail: {
 							summary: "Create User",
@@ -46,9 +53,14 @@ export const registerUserRoute = (app: AppContext) =>
 				// Show User
 				.get(
 					"/:id",
-					({ params: { id }, userRepository }) => userRepository.show(id),
+					async ({ params: { id }, userRepository }) => {
+						const userEntity = await userRepository.show(id);
+						return userEntity.render();
+					},
 					{
-						response: userTypeBoxSchema,
+						params: t.Pick(userTypeBoxSchema, ["id"]),
+
+						response: t.Omit(userTypeBoxSchema, ["password"]),
 
 						detail: {
 							summary: "Show User",
@@ -61,12 +73,16 @@ export const registerUserRoute = (app: AppContext) =>
 				// Update User
 				.put(
 					"/:id",
-					({ params: { id }, body, userRepository }) =>
-						userRepository.update(id, body),
+					async ({ params: { id }, body, userRepository }) => {
+						const userEnity = await userRepository.update(id, body);
+						return userEnity.render();
+					},
 					{
+						params: t.Pick(userTypeBoxSchema, ["id"]),
+
 						body: t.Partial(t.Omit(userTypeBoxSchema, ["id", "password"])),
 
-						response: userTypeBoxSchema,
+						response: t.Omit(userTypeBoxSchema, ["password"]),
 
 						detail: {
 							summary: "Update User",
@@ -79,9 +95,14 @@ export const registerUserRoute = (app: AppContext) =>
 				// Delete User
 				.delete(
 					"/:id",
-					({ params: { id }, userRepository }) => userRepository.destroy(id),
+					async ({ params: { id }, userRepository }) => {
+						const userEntity = await userRepository.destroy(id);
+						return userEntity.render();
+					},
 					{
-						response: userTypeBoxSchema,
+						params: t.Pick(userTypeBoxSchema, ["id"]),
+
+						response: t.Omit(userTypeBoxSchema, ["password"]),
 
 						detail: {
 							summary: "Delete User",

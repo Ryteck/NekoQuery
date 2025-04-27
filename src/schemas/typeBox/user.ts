@@ -1,6 +1,6 @@
 import { t } from "elysia";
 
-export const userTypeBoxSchema = t.Object({
+const userTypeBoxSchema = t.Object({
 	id: t.String({
 		format: "uuid",
 		description: "Unique identifier for the user, represented in UUID format.",
@@ -22,3 +22,5 @@ export const userTypeBoxSchema = t.Object({
 			"User's public key used for cryptographic operations such as secure communication or authentication.",
 	}),
 });
+
+export default userTypeBoxSchema;

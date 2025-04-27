@@ -18,5 +18,39 @@ model User {
   password  String
   publicKey String @map("public_key")
 
+  teams Team[]
+
   @@map("users")
+}
+
+model Team {
+  id   String @id @default(uuid())
+  name String
+
+  userId String @map("user_id")
+  user   User   @relation(fields: userId, references: id)
+
+  slug  String @default("")
+  stamp String @default("")
+
+  projects Project[]
+
+  @@unique([slug, stamp])
+  @@unique([userId, slug])
+  @@map("teams")
+}
+
+model Project {
+  id   String @id @default(uuid())
+  name String
+
+  teamId String @map("team_id")
+  team   Team   @relation(fields: teamId, references: id)
+
+  slug  String
+  stamp String
+
+  @@unique([slug, stamp])
+  @@unique([teamId, slug])
+  @@map("projects")
 }
