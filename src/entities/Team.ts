@@ -1,6 +1,6 @@
-import Entity from "../domain/Entity";
-import UserRepository from "../repositories/User";
-import type { TeamSchema } from "../schemas/zod/team";
+import Entity from "@/domain/Entity";
+import UserRepository from "@/repositories/User";
+import type { TeamSchema } from "@/schemas/zod/team";
 import type { RenderedUser } from "./User";
 
 export interface RenderedTeam extends Omit<TeamSchema, "userId"> {

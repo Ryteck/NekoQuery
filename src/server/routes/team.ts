@@ -1,6 +1,6 @@
+import teamTypeBoxSchema from "@/schemas/typeBox/team";
+import type { AppContext } from "@/server/app";
 import { t } from "elysia";
-import type { AppContext } from "../app";
-import teamTypeBoxSchema from "../schemas/typeBox/team";
 
 export const registerTeamRoute = (app: AppContext) =>
 	app.group(

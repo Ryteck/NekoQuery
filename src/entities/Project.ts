@@ -1,6 +1,6 @@
-import Entity from "../domain/Entity";
-import TeamRepository from "../repositories/Team";
-import type { ProjectSchema } from "../schemas/zod/project";
+import Entity from "@/domain/Entity";
+import TeamRepository from "@/repositories/Team";
+import type { ProjectSchema } from "@/schemas/zod/project";
 import type { RenderedTeam } from "./Team";
 
 export interface RenderedProject extends Omit<ProjectSchema, "teamId"> {

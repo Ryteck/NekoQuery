@@ -1,6 +1,6 @@
-import Repository from "../domain/Repository";
-import UserEntity from "../entities/User";
-import type { User } from "../generated/prisma";
+import Repository from "@/domain/Repository";
+import UserEntity from "@/entities/User";
+import type { User } from "@/generated/prisma";
 
 type StoreUserData = Omit<User, "id">;
 type UpdateUserData = Partial<Omit<StoreUserData, "password">>;

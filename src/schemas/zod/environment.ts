@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const environmentSchema = z.object({
-	PORT: z.coerce.number(),
+	SERVER_PORT: z.coerce.number(),
 	DATABASE_URL: z.string().url(),
 	JWT_SECRET: z.string(),
 });

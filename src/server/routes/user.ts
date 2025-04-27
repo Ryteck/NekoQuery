@@ -1,6 +1,6 @@
+import userTypeBoxSchema from "@/schemas/typeBox/user";
+import type { AppContext } from "@/server/app";
 import { t } from "elysia";
-import type { AppContext } from "../app";
-import userTypeBoxSchema from "../schemas/typeBox/user";
 
 export const registerUserRoute = (app: AppContext) =>
 	app.group(
@@ -35,11 +35,17 @@ export const registerUserRoute = (app: AppContext) =>
 				.post(
 					"/",
 					async ({ body, userRepository }) => {
-						const userEntity = await userRepository.store(body);
+						const publicKey = "publicKey";
+
+						const userEntity = await userRepository.store({
+							...body,
+							publicKey,
+						});
+
 						return userEntity.render();
 					},
 					{
-						body: t.Omit(userTypeBoxSchema, ["id"]),
+						body: t.Omit(userTypeBoxSchema, ["id", "publicKey"]),
 
 						response: t.Omit(userTypeBoxSchema, ["password"]),
 

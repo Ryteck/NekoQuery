@@ -1,11 +1,11 @@
+import ProjectRepository from "@/repositories/Project";
+import TeamRepository from "@/repositories/Team";
+import UserRepository from "@/repositories/User";
+import payloadSchema from "@/schemas/zod/payload";
+import { JWT_SECRET } from "@/services/environment";
 import jwt from "@elysiajs/jwt";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
-import ProjectRepository from "./repositories/Project";
-import TeamRepository from "./repositories/Team";
-import UserRepository from "./repositories/User";
-import payloadSchema from "./schemas/zod/payload";
-import { JWT_SECRET } from "./services/environment";
 
 const app = new Elysia()
 

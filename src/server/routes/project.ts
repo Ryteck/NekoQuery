@@ -1,6 +1,6 @@
+import projectTypeBoxSchema from "@/schemas/typeBox/project";
+import type { AppContext } from "@/server/app";
 import { t } from "elysia";
-import type { AppContext } from "../app";
-import projectTypeBoxSchema from "../schemas/typeBox/project";
 
 export const registerProjectRoute = (app: AppContext) =>
 	app.group(

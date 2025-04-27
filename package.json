@@ -5,7 +5,8 @@
 	"private": true,
 	"scripts": {
 		"setup": "prisma db push",
-		"dev": "bun --watch src/index.ts"
+		"dev": "bun --watch src/server/index.ts",
+		"start": "bun src/server/index.ts"
 	},
 	"dependencies": {
 		"@elysiajs/jwt": "^1.2.0",

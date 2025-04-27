@@ -1,7 +1,7 @@
-import Repository from "../domain/Repository";
-import ProjectEntity from "../entities/Project";
-import type { Project } from "../generated/prisma";
-import { generateSlug, generateStamp } from "../libs/slug";
+import Repository from "@/domain/Repository";
+import ProjectEntity from "@/entities/Project";
+import type { Project } from "@/generated/prisma";
+import { generateSlug, generateStamp } from "@/libs/slug";
 
 type StoreProjectData = Omit<Project, "id" | "slug" | "stamp">;
 type UpdateProjectData = Partial<Omit<StoreProjectData, "teamId">>;

@@ -1,7 +1,7 @@
+import userTypeBoxSchema from "@/schemas/typeBox/user";
+import type { PayloadSchema } from "@/schemas/zod/payload";
+import type { AppContext } from "@/server/app";
 import { t } from "elysia";
-import type { AppContext } from "../app";
-import userTypeBoxSchema from "../schemas/typeBox/user";
-import type { PayloadSchema } from "../schemas/zod/payload";
 
 export const registerAuthRoute = (app: AppContext) =>
 	app.group(
@@ -23,13 +23,19 @@ export const registerAuthRoute = (app: AppContext) =>
 						await user.validatePassword(password);
 
 						const payload: PayloadSchema = { userId: user.render().id };
+						const token = await jwt.sign(payload);
 
-						return jwt.sign(payload);
+						return { token };
 					},
 					{
 						body: t.Pick(userTypeBoxSchema, ["email", "password"]),
 
-						response: t.String(),
+						response: t.Object({
+							token: t.String({
+								description:
+									"JWT token used for authenticating subsequent API requests.",
+							}),
+						}),
 
 						detail: {
 							summary: "Authenticate User",

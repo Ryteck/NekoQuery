@@ -1,5 +1,5 @@
-import Entity from "../domain/Entity";
-import type { UserSchema } from "../schemas/zod/user";
+import Entity from "@/domain/Entity";
+import type { UserSchema } from "@/schemas/zod/user";
 
 export type RenderedUser = Omit<UserSchema, "password">;
 

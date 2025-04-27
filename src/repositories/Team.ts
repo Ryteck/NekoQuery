@@ -1,7 +1,7 @@
-import Repository from "../domain/Repository";
-import TeamEntity from "../entities/Team";
-import type { Team } from "../generated/prisma";
-import { generateSlug, generateStamp } from "../libs/slug";
+import Repository from "@/domain/Repository";
+import TeamEntity from "@/entities/Team";
+import type { Team } from "@/generated/prisma";
+import { generateSlug, generateStamp } from "@/libs/slug";
 
 type StoreTeamData = Omit<Team, "id" | "slug" | "stamp">;
 type UpdateTeamData = Partial<Omit<StoreTeamData, "userId">>;
