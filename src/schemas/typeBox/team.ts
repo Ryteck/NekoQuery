@@ -8,10 +8,6 @@ const teamTypeBoxSchema = t.Object({
 	name: t.String({
 		description: "Name of the team.",
 	}),
-	userId: t.String({
-		format: "uuid",
-		description: "Unique identifier of the user who owns or created the team.",
-	}),
 	slug: t.String({
 		description:
 			"URL-friendly identifier for the team, typically used in web routes.",

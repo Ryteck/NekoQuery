@@ -1,9 +1,10 @@
 import Repository from "@/domain/Repository";
 import UserEntity from "@/entities/User";
 import type { User } from "@/generated/prisma";
+import { generateKeyPairFromSeed } from "@/services/seedbox";
 
-type StoreUserData = Omit<User, "id">;
-type UpdateUserData = Partial<Omit<StoreUserData, "password">>;
+type StoreUserData = Omit<User, "id" | "publicKey">;
+type UpdateUserData = Partial<Omit<StoreUserData, "password" | "publicKey">>;
 
 export default class UserRepository extends Repository {
 	public async list(): Promise<Array<UserEntity>> {
@@ -16,16 +17,16 @@ export default class UserRepository extends Repository {
 		name,
 		email,
 		password,
-		publicKey,
 	}: StoreUserData): Promise<UserEntity> {
 		const passwordHash = await UserEntity.generatePasswordHash(password);
+		const keyPair = generateKeyPairFromSeed(password);
 
 		const databaseUser = await this.prismaClient.user.create({
 			data: {
 				name,
 				email,
 				password: passwordHash,
-				publicKey,
+				publicKey: keyPair.publicKey,
 			},
 		});
 
@@ -50,11 +51,11 @@ export default class UserRepository extends Repository {
 
 	public async update(
 		id: string,
-		{ name, email, publicKey }: UpdateUserData,
+		{ name, email }: UpdateUserData,
 	): Promise<UserEntity> {
 		const databaseUser = await this.prismaClient.user.update({
 			where: { id },
-			data: { name, email, publicKey },
+			data: { name, email },
 		});
 
 		return new UserEntity(databaseUser);

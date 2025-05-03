@@ -16,7 +16,7 @@ export default class ProjectEntity extends Entity<
 
 		const teamRepository = new TeamRepository();
 		const teamEntity = await teamRepository.show(teamId);
-		const team = await teamEntity.render();
+		const team = teamEntity.render();
 
 		return { id, name, slug, stamp, team };
 	}

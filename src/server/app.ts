@@ -1,3 +1,4 @@
+import ParticipantRepository from "@/repositories/Participant";
 import ProjectRepository from "@/repositories/Project";
 import TeamRepository from "@/repositories/Team";
 import UserRepository from "@/repositories/User";
@@ -13,6 +14,7 @@ const app = new Elysia()
 	.decorate("userRepository", new UserRepository())
 	.decorate("teamRepository", new TeamRepository())
 	.decorate("projectRepository", new ProjectRepository())
+	.decorate("participantRepository", new ParticipantRepository())
 
 	// Swagger Plugin
 	.use(

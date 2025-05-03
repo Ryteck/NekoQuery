@@ -35,13 +35,7 @@ export const registerUserRoute = (app: AppContext) =>
 				.post(
 					"/",
 					async ({ body, userRepository }) => {
-						const publicKey = "publicKey";
-
-						const userEntity = await userRepository.store({
-							...body,
-							publicKey,
-						});
-
+						const userEntity = await userRepository.store(body);
 						return userEntity.render();
 					},
 					{
@@ -86,7 +80,9 @@ export const registerUserRoute = (app: AppContext) =>
 					{
 						params: t.Pick(userTypeBoxSchema, ["id"]),
 
-						body: t.Partial(t.Omit(userTypeBoxSchema, ["id", "password"])),
+						body: t.Partial(
+							t.Omit(userTypeBoxSchema, ["id", "password", "publicKey"]),
+						),
 
 						response: t.Omit(userTypeBoxSchema, ["password"]),
 

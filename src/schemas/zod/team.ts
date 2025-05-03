@@ -3,7 +3,6 @@ import { z } from "zod";
 const teamSchema = z.object({
 	id: z.string().uuid(),
 	name: z.string(),
-	userId: z.string().uuid(),
 	slug: z.string(),
 	stamp: z.string(),
 });

@@ -18,7 +18,7 @@ model User {
   password  String
   publicKey String @map("public_key")
 
-  teams Team[]
+  participations Participant[]
 
   @@map("users")
 }
@@ -27,17 +27,37 @@ model Team {
   id   String @id @default(uuid())
   name String
 
-  userId String @map("user_id")
-  user   User   @relation(fields: userId, references: id)
-
   slug  String @default("")
   stamp String @default("")
 
-  projects Project[]
+  projects     Project[]
+  participants Participant[]
 
   @@unique([slug, stamp])
-  @@unique([userId, slug])
   @@map("teams")
+}
+
+enum ParticipantLevel {
+  ADMIN
+  MEMBER
+
+  @@map("participant_level")
+}
+
+model Participant {
+  userId String @map("user_id")
+  user   User   @relation(fields: userId, references: id)
+
+  teamId String @map("team_id")
+  team   Team   @relation(fields: teamId, references: id)
+
+  level ParticipantLevel
+
+  nanoIdNonce      String @map("nano_id_nonce")
+  nanoIdCiphertext String @map("nano_id_ciphertext")
+
+  @@id([userId, teamId])
+  @@map("participants")
 }
 
 model Project {
