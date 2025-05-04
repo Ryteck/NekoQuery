@@ -38,3 +38,6 @@ prisma/*.db*
 
 # Generated
 src/generated
+
+# Next.js Build and Cache output
+.next
