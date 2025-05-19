@@ -3,8 +3,8 @@
 import { gruppoFont } from "@/fonts/gruppo";
 import { LayoutDashboardIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ButtonComponent } from "./ui/button";
-import { NavLinkComponent } from "./ui/nav-link";
+import ButtonComponent from "./ui/button";
+import NavLinkComponent from "./ui/nav-link";
 
 export function HeaderComponent() {
 	const router = useRouter();
@@ -17,8 +17,8 @@ export function HeaderComponent() {
 
 			<div className="flex-1 flex gap-6 items-center justify-end">
 				<NavLinkComponent href="/">Home</NavLinkComponent>
-				<NavLinkComponent href="/sign-in">Sign In</NavLinkComponent>
 				<NavLinkComponent href="/about">About</NavLinkComponent>
+				<NavLinkComponent href="/sign-in">Sign In</NavLinkComponent>
 
 				<ButtonComponent
 					onClick={() => {
