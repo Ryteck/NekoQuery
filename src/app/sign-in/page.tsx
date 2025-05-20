@@ -1,24 +1,54 @@
 "use client";
 
 import SignInTemplateAsset from "@/assets/sign-in-template.jpg";
+import SocialLoginComponent from "@/components/social-login";
 import ButtonComponent from "@/components/ui/button";
 import * as InputComponent from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(8),
+	rememberMe: z.boolean(),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
 
 export default function Page() {
 	const [showPassword, setShowPassword] = useState(false);
 
+	const form = useForm({
+		resolver: zodResolver(formSchema),
+	});
+
+	function handleSignIn(data: FormSchema) {
+		console.log("SignIn data", data);
+	}
+
 	return (
 		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8">
 			<div className="flex-1 rounded-2xl relative overflow-hidden">
-				<Image alt="" className="object-cover" src={SignInTemplateAsset} fill />
+				<Image
+					alt=""
+					className="object-cover"
+					src={SignInTemplateAsset}
+					fill
+					priority
+					sizes="64rem"
+				/>
 			</div>
 
 			{/* Sign In Form */}
-			<form className="mx-auto flex flex-col gap-6 min-w-[480px]">
+			<form
+				className="mx-auto flex flex-col gap-6 w-[480px]"
+				onSubmit={form.handleSubmit(handleSignIn)}
+			>
 				<h3 className="text-2xl">Sign In</h3>
 				<p className="text-sm">
 					Enter your email below to login to your account
@@ -26,7 +56,10 @@ export default function Page() {
 
 				{/* Email Field */}
 				<InputComponent.Root>
-					<InputComponent.Label htmlFor="input-email">
+					<InputComponent.Label
+						htmlFor="custom-input-email"
+						variants={{ error: !!form.formState.errors.email }}
+					>
 						Email
 					</InputComponent.Label>
 					<InputComponent.Core>
@@ -35,17 +68,25 @@ export default function Page() {
 						</InputComponent.PrefixIcon>
 
 						<InputComponent.Input
-							id="input-email"
-							type={showPassword ? "text" : "password"}
+							id="custom-input-email"
+							type="email"
 							placeholder="your@email.com"
 							variants={{ withPrefixIcon: true }}
+							{...form.register("email")}
 						/>
 					</InputComponent.Core>
+
+					<InputComponent.ErrorMessage>
+						{form.formState.errors.email?.message}
+					</InputComponent.ErrorMessage>
 				</InputComponent.Root>
 
 				{/* Password Field */}
 				<InputComponent.Root>
-					<InputComponent.Label htmlFor="input-password">
+					<InputComponent.Label
+						htmlFor="custom-input-password"
+						variants={{ error: !!form.formState.errors.password }}
+					>
 						Password
 					</InputComponent.Label>
 					<InputComponent.Core>
@@ -54,13 +95,14 @@ export default function Page() {
 						</InputComponent.PrefixIcon>
 
 						<InputComponent.Input
-							id="input-password"
+							id="custom-input-password"
 							type={showPassword ? "text" : "password"}
 							placeholder="••••••••"
 							variants={{
 								withPrefixIcon: true,
 								withActionIcon: true,
 							}}
+							{...form.register("password")}
 						/>
 
 						<InputComponent.ActionIcon
@@ -69,19 +111,23 @@ export default function Page() {
 							{showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
 						</InputComponent.ActionIcon>
 					</InputComponent.Core>
+
+					<InputComponent.ErrorMessage>
+						{form.formState.errors.password?.message}
+					</InputComponent.ErrorMessage>
 				</InputComponent.Root>
 
 				{/* Remember Me & Forgot Password */}
 				<div className="flex items-center justify-between">
 					<div className="flex items-center">
 						<input
-							id="remember-me"
-							name="remember-me"
+							id="custom-input-remember-me"
 							type="checkbox"
 							className="h-4 w-4 text-rose-600 focus:ring-rose-500 border-neutral-600 rounded bg-neutral-700 accent-rose-600"
+							{...form.register("rememberMe")}
 						/>
 						<label
-							htmlFor="remember-me"
+							htmlFor="custom-input-remember-me"
 							className="ml-2 block text-sm text-neutral-300"
 						>
 							Remember me
@@ -94,7 +140,7 @@ export default function Page() {
 				</div>
 
 				{/* Submit Button */}
-				<ButtonComponent>Sign In</ButtonComponent>
+				<ButtonComponent type="submit">Sign In</ButtonComponent>
 
 				{/* Divider */}
 				<div className="relative">
@@ -109,17 +155,7 @@ export default function Page() {
 				</div>
 
 				{/* Social Login */}
-				<div className="grid grid-cols-3 gap-3">
-					{["Google", "GitHub", "Facebook"].map((arg) => (
-						<button
-							key={arg}
-							type="button"
-							className="cursor-pointer w-full inline-flex justify-center py-2 px-4 border border-neutral-600 rounded-md shadow-sm bg-neutral-700 text-sm font-medium text-neutral-300 hover:bg-neutral-600"
-						>
-							{arg}
-						</button>
-					))}
-				</div>
+				<SocialLoginComponent />
 
 				<div className="flex justify-center w-full border-t border-neutral-600 py-4">
 					<p className="text-center text-xs text-neutral-500">

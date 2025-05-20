@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ButtonComponent from "./ui/button";
 import NavLinkComponent from "./ui/nav-link";
 
-export function HeaderComponent() {
+export default function HeaderComponent() {
 	const router = useRouter();
 
 	return (

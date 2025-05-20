@@ -27,6 +27,9 @@ export function Root({
 
 const LabelInputStyles = tv({
 	base: "block text-sm font-medium text-neutral-300",
+	variants: {
+		error: { true: "text-red-500" },
+	},
 });
 
 export type LabelInputVariants = VariantProps<typeof LabelInputStyles>;
@@ -155,6 +158,33 @@ export function ActionIcon({
 		<button
 			type={type ?? "button"}
 			className={ActionIconInputStyles({ className, ...variants })}
+			{...props}
+		/>
+	);
+}
+
+// ErrorMessage
+
+const ErrorMessageInputStyles = tv({
+	base: "font-medium text-sm text-red-500",
+});
+
+export type ErrorMessageInputVariants = VariantProps<
+	typeof ErrorMessageInputStyles
+>;
+
+export interface ErrorMessageInputComponentProps extends ComponentProps<"p"> {
+	variants?: ErrorMessageInputVariants;
+}
+
+export function ErrorMessage({
+	className,
+	variants,
+	...props
+}: ErrorMessageInputComponentProps) {
+	return (
+		<p
+			className={ErrorMessageInputStyles({ className, ...variants })}
 			{...props}
 		/>
 	);

@@ -1,8 +1,10 @@
 "use client";
 
 import SignUpTemplateAsset from "@/assets/sign-up-template.jpg";
+import SocialLoginComponent from "@/components/social-login";
 import ButtonComponent from "@/components/ui/button";
 import * as InputComponent from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	EyeIcon,
 	EyeOffIcon,
@@ -13,22 +15,48 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formSchema = z.object({
+	name: z.string().nonempty(),
+	email: z.string().email(),
+	password: z.string().min(8),
+	confirmPassword: z.string().min(8),
+	agreeToTerms: z.literal(true),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
 
 export default function Page() {
 	const [showPassword, setShowPassword] = useState(false);
 
+	const form = useForm({
+		resolver: zodResolver(formSchema),
+	});
+
+	function handleSignUp(data: FormSchema) {
+		console.log("SignUp data", data);
+	}
+
 	return (
 		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8">
 			{/* Sign Up Form */}
-			<form className="mx-auto flex flex-col gap-6 min-w-[480px]">
+			<form
+				className="mx-auto flex flex-col gap-6 min-w-[480px]"
+				onSubmit={form.handleSubmit(handleSignUp)}
+			>
 				<h3 className="text-2xl">Sign Up</h3>
 				<p className="text-sm">
-					Enter your email below to login to your account
+					Complete the fields below to set up your new account
 				</p>
 
-				{/* Email Field */}
+				{/* Full Name Field */}
 				<InputComponent.Root>
-					<InputComponent.Label htmlFor="input-email">
+					<InputComponent.Label
+						htmlFor="input-name"
+						variants={{ error: !!form.formState.errors.name }}
+					>
 						Full Name
 					</InputComponent.Label>
 					<InputComponent.Core>
@@ -37,17 +65,25 @@ export default function Page() {
 						</InputComponent.PrefixIcon>
 
 						<InputComponent.Input
-							id="input-email"
+							id="input-name"
 							type="text"
-							placeholder="your@email.com"
+							placeholder="John Doe"
 							variants={{ withPrefixIcon: true }}
+							{...form.register("name")}
 						/>
 					</InputComponent.Core>
+
+					<InputComponent.ErrorMessage>
+						{form.formState.errors.name?.message}
+					</InputComponent.ErrorMessage>
 				</InputComponent.Root>
 
 				{/* Email Field */}
 				<InputComponent.Root>
-					<InputComponent.Label htmlFor="input-email">
+					<InputComponent.Label
+						htmlFor="input-email"
+						variants={{ error: !!form.formState.errors.email }}
+					>
 						Email
 					</InputComponent.Label>
 					<InputComponent.Core>
@@ -60,13 +96,21 @@ export default function Page() {
 							type="email"
 							placeholder="your@email.com"
 							variants={{ withPrefixIcon: true }}
+							{...form.register("email")}
 						/>
 					</InputComponent.Core>
+
+					<InputComponent.ErrorMessage>
+						{form.formState.errors.email?.message}
+					</InputComponent.ErrorMessage>
 				</InputComponent.Root>
 
 				{/* Password Field */}
 				<InputComponent.Root>
-					<InputComponent.Label htmlFor="input-password">
+					<InputComponent.Label
+						htmlFor="input-password"
+						variants={{ error: !!form.formState.errors.password }}
+					>
 						Password
 					</InputComponent.Label>
 					<InputComponent.Core>
@@ -82,6 +126,7 @@ export default function Page() {
 								withPrefixIcon: true,
 								withActionIcon: true,
 							}}
+							{...form.register("password")}
 						/>
 
 						<InputComponent.ActionIcon
@@ -90,11 +135,18 @@ export default function Page() {
 							{showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
 						</InputComponent.ActionIcon>
 					</InputComponent.Core>
+
+					<InputComponent.ErrorMessage>
+						{form.formState.errors.password?.message}
+					</InputComponent.ErrorMessage>
 				</InputComponent.Root>
 
 				{/*  Confirm Password Field */}
 				<InputComponent.Root>
-					<InputComponent.Label htmlFor="input-confirm-password">
+					<InputComponent.Label
+						htmlFor="input-confirm-password"
+						variants={{ error: !!form.formState.errors.confirmPassword }}
+					>
 						Confirm Password
 					</InputComponent.Label>
 					<InputComponent.Core>
@@ -110,6 +162,7 @@ export default function Page() {
 								withPrefixIcon: true,
 								withActionIcon: true,
 							}}
+							{...form.register("confirmPassword")}
 						/>
 
 						<InputComponent.ActionIcon
@@ -118,33 +171,47 @@ export default function Page() {
 							{showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
 						</InputComponent.ActionIcon>
 					</InputComponent.Core>
+
+					<InputComponent.ErrorMessage>
+						{form.formState.errors.confirmPassword?.message}
+					</InputComponent.ErrorMessage>
 				</InputComponent.Root>
 
 				{/* Terms */}
 				<div className="flex items-center">
 					<input
-						id="agree-terms"
-						name="agree-terms"
+						id="custom-input-agree-terms"
 						type="checkbox"
 						className="h-4 w-4 text-rose-600 focus:ring-rose-500 border-neutral-600 rounded bg-neutral-700 accent-rose-600"
+						{...form.register("agreeToTerms")}
 					/>
 					<label
-						htmlFor="agree-terms"
+						htmlFor="custom-input-agree-terms"
 						className="ml-2 block text-sm text-gray-300"
 					>
 						I agree to the{" "}
-						<a href="/" className="text-rose-500 hover:text-rose-400">
+						<a
+							href="/about"
+							target="_blank"
+							rel="noreferrer"
+							className="text-rose-500 hover:text-rose-400"
+						>
 							Terms
 						</a>{" "}
 						and{" "}
-						<a href="/" className="text-rose-500 hover:text-rose-400">
+						<a
+							href="/about"
+							target="_blank"
+							rel="noreferrer"
+							className="text-rose-500 hover:text-rose-400"
+						>
 							Privacy Policy
 						</a>
 					</label>
 				</div>
 
 				{/* Submit Button */}
-				<ButtonComponent>Create account</ButtonComponent>
+				<ButtonComponent type="submit">Create account</ButtonComponent>
 
 				{/* Divider */}
 				<div className="relative">
@@ -159,17 +226,7 @@ export default function Page() {
 				</div>
 
 				{/* Social Login */}
-				<div className="grid grid-cols-3 gap-3">
-					{["Google", "GitHub", "Facebook"].map((arg) => (
-						<button
-							key={arg}
-							type="button"
-							className="cursor-pointer w-full inline-flex justify-center py-2 px-4 border border-neutral-600 rounded-md shadow-sm bg-neutral-700 text-sm font-medium text-neutral-300 hover:bg-neutral-600"
-						>
-							{arg}
-						</button>
-					))}
-				</div>
+				<SocialLoginComponent />
 
 				<div className="flex justify-center w-full border-t border-neutral-600 py-4">
 					<p className="text-center text-xs text-neutral-500">
@@ -186,7 +243,14 @@ export default function Page() {
 			</form>
 
 			<div className="flex-1 rounded-2xl relative overflow-hidden">
-				<Image alt="" className="object-cover" src={SignUpTemplateAsset} fill />
+				<Image
+					alt=""
+					className="object-cover"
+					src={SignUpTemplateAsset}
+					fill
+					priority
+					sizes="64rem"
+				/>
 			</div>
 		</div>
 	);
