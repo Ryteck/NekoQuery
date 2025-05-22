@@ -3,18 +3,24 @@
 import SignInTemplateAsset from "@/assets/sign-in-template.jpg";
 import SocialLoginComponent from "@/components/social-login";
 import ButtonComponent from "@/components/ui/button";
-import * as InputComponent from "@/components/ui/input";
+import * as InputUiComponent from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(8),
+	email: z.string().email({
+		message: "Please enter a valid email address.",
+	}),
+	password: z.string().min(8, {
+		message: "Password must be at least 8 characters long.",
+	}),
 	rememberMe: z.boolean(),
 });
 
@@ -27,13 +33,23 @@ export default function Page() {
 		resolver: zodResolver(formSchema),
 	});
 
-	function handleSignIn(data: FormSchema) {
-		console.log("SignIn data", data);
+	const router = useRouter();
+
+	async function handleSignIn(data: FormSchema) {
+		await authClient.signIn.email({
+			email: data.email,
+			password: data.password,
+			rememberMe: data.rememberMe,
+			fetchOptions: {
+				onSuccess: () => router.push("/dashboard"),
+				onError: (ctx) => alert(ctx.error.message),
+			},
+		});
 	}
 
 	return (
-		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8">
-			<div className="flex-1 rounded-2xl relative overflow-hidden">
+		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8 mx-auto w-fit lg:w-full">
+			<div className="flex-1 rounded-2xl relative overflow-hidden hidden lg:block">
 				<Image
 					alt=""
 					className="object-cover"
@@ -55,46 +71,46 @@ export default function Page() {
 				</p>
 
 				{/* Email Field */}
-				<InputComponent.Root>
-					<InputComponent.Label
+				<InputUiComponent.Root>
+					<InputUiComponent.Label
 						htmlFor="custom-input-email"
 						variants={{ error: !!form.formState.errors.email }}
 					>
 						Email
-					</InputComponent.Label>
-					<InputComponent.Core>
-						<InputComponent.PrefixIcon>
+					</InputUiComponent.Label>
+					<InputUiComponent.Core>
+						<InputUiComponent.PrefixIcon>
 							<MailIcon size={18} />
-						</InputComponent.PrefixIcon>
+						</InputUiComponent.PrefixIcon>
 
-						<InputComponent.Input
+						<InputUiComponent.Input
 							id="custom-input-email"
 							type="email"
 							placeholder="your@email.com"
 							variants={{ withPrefixIcon: true }}
 							{...form.register("email")}
 						/>
-					</InputComponent.Core>
+					</InputUiComponent.Core>
 
-					<InputComponent.ErrorMessage>
+					<InputUiComponent.ErrorMessage>
 						{form.formState.errors.email?.message}
-					</InputComponent.ErrorMessage>
-				</InputComponent.Root>
+					</InputUiComponent.ErrorMessage>
+				</InputUiComponent.Root>
 
 				{/* Password Field */}
-				<InputComponent.Root>
-					<InputComponent.Label
+				<InputUiComponent.Root>
+					<InputUiComponent.Label
 						htmlFor="custom-input-password"
 						variants={{ error: !!form.formState.errors.password }}
 					>
 						Password
-					</InputComponent.Label>
-					<InputComponent.Core>
-						<InputComponent.PrefixIcon>
+					</InputUiComponent.Label>
+					<InputUiComponent.Core>
+						<InputUiComponent.PrefixIcon>
 							<LockIcon size={18} />
-						</InputComponent.PrefixIcon>
+						</InputUiComponent.PrefixIcon>
 
-						<InputComponent.Input
+						<InputUiComponent.Input
 							id="custom-input-password"
 							type={showPassword ? "text" : "password"}
 							placeholder="••••••••"
@@ -105,17 +121,17 @@ export default function Page() {
 							{...form.register("password")}
 						/>
 
-						<InputComponent.ActionIcon
+						<InputUiComponent.ActionIcon
 							onClick={() => setShowPassword((state) => !state)}
 						>
 							{showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
-						</InputComponent.ActionIcon>
-					</InputComponent.Core>
+						</InputUiComponent.ActionIcon>
+					</InputUiComponent.Core>
 
-					<InputComponent.ErrorMessage>
+					<InputUiComponent.ErrorMessage>
 						{form.formState.errors.password?.message}
-					</InputComponent.ErrorMessage>
-				</InputComponent.Root>
+					</InputUiComponent.ErrorMessage>
+				</InputUiComponent.Root>
 
 				{/* Remember Me & Forgot Password */}
 				<div className="flex items-center justify-between">

@@ -3,7 +3,8 @@
 import SignUpTemplateAsset from "@/assets/sign-up-template.jpg";
 import SocialLoginComponent from "@/components/social-login";
 import ButtonComponent from "@/components/ui/button";
-import * as InputComponent from "@/components/ui/input";
+import * as InputUiComponent from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	EyeIcon,
@@ -14,17 +15,33 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const formSchema = z.object({
-	name: z.string().nonempty(),
-	email: z.string().email(),
-	password: z.string().min(8),
-	confirmPassword: z.string().min(8),
-	agreeToTerms: z.literal(true),
-});
+const formSchema = z
+	.object({
+		name: z.string().nonempty({
+			message: "Name is required.",
+		}),
+		email: z.string().email({
+			message: "Please enter a valid email address.",
+		}),
+		password: z.string().min(8, {
+			message: "Password must be at least 8 characters long.",
+		}),
+		confirmPassword: z.string().min(8, {
+			message: "Please confirm your password (minimum 8 characters).",
+		}),
+		agreeToTerms: z.boolean().refine((arg) => arg, {
+			message: "You must agree to the terms and conditions.",
+		}),
+	})
+	.refine((arg) => arg.password === arg.confirmPassword, {
+		message: "Passwords do not match.",
+		path: ["confirmPassword"],
+	});
 
 type FormSchema = z.infer<typeof formSchema>;
 
@@ -35,12 +52,22 @@ export default function Page() {
 		resolver: zodResolver(formSchema),
 	});
 
-	function handleSignUp(data: FormSchema) {
-		console.log("SignUp data", data);
+	const router = useRouter();
+
+	async function handleSignUp(data: FormSchema) {
+		await authClient.signUp.email({
+			name: data.name,
+			email: data.email,
+			password: data.password,
+			fetchOptions: {
+				onSuccess: () => router.push("/dashboard"),
+				onError: (ctx) => alert(ctx.error.message),
+			},
+		});
 	}
 
 	return (
-		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8">
+		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8 mx-auto w-fit lg:w-full">
 			{/* Sign Up Form */}
 			<form
 				className="mx-auto flex flex-col gap-6 min-w-[480px]"
@@ -52,73 +79,73 @@ export default function Page() {
 				</p>
 
 				{/* Full Name Field */}
-				<InputComponent.Root>
-					<InputComponent.Label
+				<InputUiComponent.Root>
+					<InputUiComponent.Label
 						htmlFor="input-name"
 						variants={{ error: !!form.formState.errors.name }}
 					>
 						Full Name
-					</InputComponent.Label>
-					<InputComponent.Core>
-						<InputComponent.PrefixIcon>
+					</InputUiComponent.Label>
+					<InputUiComponent.Core>
+						<InputUiComponent.PrefixIcon>
 							<User2Icon size={18} />
-						</InputComponent.PrefixIcon>
+						</InputUiComponent.PrefixIcon>
 
-						<InputComponent.Input
+						<InputUiComponent.Input
 							id="input-name"
 							type="text"
 							placeholder="John Doe"
 							variants={{ withPrefixIcon: true }}
 							{...form.register("name")}
 						/>
-					</InputComponent.Core>
+					</InputUiComponent.Core>
 
-					<InputComponent.ErrorMessage>
+					<InputUiComponent.ErrorMessage>
 						{form.formState.errors.name?.message}
-					</InputComponent.ErrorMessage>
-				</InputComponent.Root>
+					</InputUiComponent.ErrorMessage>
+				</InputUiComponent.Root>
 
 				{/* Email Field */}
-				<InputComponent.Root>
-					<InputComponent.Label
+				<InputUiComponent.Root>
+					<InputUiComponent.Label
 						htmlFor="input-email"
 						variants={{ error: !!form.formState.errors.email }}
 					>
 						Email
-					</InputComponent.Label>
-					<InputComponent.Core>
-						<InputComponent.PrefixIcon>
+					</InputUiComponent.Label>
+					<InputUiComponent.Core>
+						<InputUiComponent.PrefixIcon>
 							<MailIcon size={18} />
-						</InputComponent.PrefixIcon>
+						</InputUiComponent.PrefixIcon>
 
-						<InputComponent.Input
+						<InputUiComponent.Input
 							id="input-email"
 							type="email"
 							placeholder="your@email.com"
 							variants={{ withPrefixIcon: true }}
 							{...form.register("email")}
 						/>
-					</InputComponent.Core>
+					</InputUiComponent.Core>
 
-					<InputComponent.ErrorMessage>
+					<InputUiComponent.ErrorMessage>
 						{form.formState.errors.email?.message}
-					</InputComponent.ErrorMessage>
-				</InputComponent.Root>
+					</InputUiComponent.ErrorMessage>
+				</InputUiComponent.Root>
 
 				{/* Password Field */}
-				<InputComponent.Root>
-					<InputComponent.Label
+				<InputUiComponent.Root>
+					<InputUiComponent.Label
 						htmlFor="input-password"
 						variants={{ error: !!form.formState.errors.password }}
 					>
 						Password
-					</InputComponent.Label>
-					<InputComponent.Core>
-						<InputComponent.PrefixIcon>
+					</InputUiComponent.Label>
+					<InputUiComponent.Core>
+						<InputUiComponent.PrefixIcon>
 							<LockIcon size={18} />
-						</InputComponent.PrefixIcon>
+						</InputUiComponent.PrefixIcon>
 
-						<InputComponent.Input
+						<InputUiComponent.Input
 							id="input-password"
 							type={showPassword ? "text" : "password"}
 							placeholder="••••••••"
@@ -129,32 +156,32 @@ export default function Page() {
 							{...form.register("password")}
 						/>
 
-						<InputComponent.ActionIcon
+						<InputUiComponent.ActionIcon
 							onClick={() => setShowPassword((state) => !state)}
 						>
 							{showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
-						</InputComponent.ActionIcon>
-					</InputComponent.Core>
+						</InputUiComponent.ActionIcon>
+					</InputUiComponent.Core>
 
-					<InputComponent.ErrorMessage>
+					<InputUiComponent.ErrorMessage>
 						{form.formState.errors.password?.message}
-					</InputComponent.ErrorMessage>
-				</InputComponent.Root>
+					</InputUiComponent.ErrorMessage>
+				</InputUiComponent.Root>
 
 				{/*  Confirm Password Field */}
-				<InputComponent.Root>
-					<InputComponent.Label
+				<InputUiComponent.Root>
+					<InputUiComponent.Label
 						htmlFor="input-confirm-password"
 						variants={{ error: !!form.formState.errors.confirmPassword }}
 					>
 						Confirm Password
-					</InputComponent.Label>
-					<InputComponent.Core>
-						<InputComponent.PrefixIcon>
+					</InputUiComponent.Label>
+					<InputUiComponent.Core>
+						<InputUiComponent.PrefixIcon>
 							<LockIcon size={18} />
-						</InputComponent.PrefixIcon>
+						</InputUiComponent.PrefixIcon>
 
-						<InputComponent.Input
+						<InputUiComponent.Input
 							id="input-confirm-password"
 							type={showPassword ? "text" : "password"}
 							placeholder="••••••••"
@@ -165,49 +192,55 @@ export default function Page() {
 							{...form.register("confirmPassword")}
 						/>
 
-						<InputComponent.ActionIcon
+						<InputUiComponent.ActionIcon
 							onClick={() => setShowPassword((state) => !state)}
 						>
 							{showPassword ? <EyeIcon size={18} /> : <EyeOffIcon size={18} />}
-						</InputComponent.ActionIcon>
-					</InputComponent.Core>
+						</InputUiComponent.ActionIcon>
+					</InputUiComponent.Core>
 
-					<InputComponent.ErrorMessage>
+					<InputUiComponent.ErrorMessage>
 						{form.formState.errors.confirmPassword?.message}
-					</InputComponent.ErrorMessage>
-				</InputComponent.Root>
+					</InputUiComponent.ErrorMessage>
+				</InputUiComponent.Root>
 
 				{/* Terms */}
-				<div className="flex items-center">
-					<input
-						id="custom-input-agree-terms"
-						type="checkbox"
-						className="h-4 w-4 text-rose-600 focus:ring-rose-500 border-neutral-600 rounded bg-neutral-700 accent-rose-600"
-						{...form.register("agreeToTerms")}
-					/>
-					<label
-						htmlFor="custom-input-agree-terms"
-						className="ml-2 block text-sm text-gray-300"
-					>
-						I agree to the{" "}
-						<a
-							href="/about"
-							target="_blank"
-							rel="noreferrer"
-							className="text-rose-500 hover:text-rose-400"
+				<div className="flex flex-col gap-1l">
+					<div className="flex items-center">
+						<input
+							id="custom-input-agree-terms"
+							type="checkbox"
+							className="h-4 w-4 text-rose-600 focus:ring-rose-500 border-neutral-600 rounded bg-neutral-700 accent-rose-600"
+							{...form.register("agreeToTerms")}
+						/>
+						<label
+							htmlFor="custom-input-agree-terms"
+							className="ml-2 block text-sm text-gray-300"
 						>
-							Terms
-						</a>{" "}
-						and{" "}
-						<a
-							href="/about"
-							target="_blank"
-							rel="noreferrer"
-							className="text-rose-500 hover:text-rose-400"
-						>
-							Privacy Policy
-						</a>
-					</label>
+							I agree to the{" "}
+							<a
+								href="/about"
+								target="_blank"
+								rel="noreferrer"
+								className="text-rose-500 hover:text-rose-400"
+							>
+								Terms
+							</a>{" "}
+							and{" "}
+							<a
+								href="/about"
+								target="_blank"
+								rel="noreferrer"
+								className="text-rose-500 hover:text-rose-400"
+							>
+								Privacy Policy
+							</a>
+						</label>
+					</div>
+
+					<InputUiComponent.ErrorMessage>
+						{form.formState.errors.agreeToTerms?.message}
+					</InputUiComponent.ErrorMessage>
 				</div>
 
 				{/* Submit Button */}
@@ -242,7 +275,7 @@ export default function Page() {
 				</div>
 			</form>
 
-			<div className="flex-1 rounded-2xl relative overflow-hidden">
+			<div className="flex-1 rounded-2xl relative overflow-hidden hidden lg:block">
 				<Image
 					alt=""
 					className="object-cover"

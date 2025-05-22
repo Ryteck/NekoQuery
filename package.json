@@ -4,9 +4,11 @@
 	"description": "Team-based GUI database manager",
 	"main": "index.js",
 	"scripts": {
+		"postinstall": "drizzle-kit migrate",
 		"dev": "next dev --turbopack",
 		"build": "next build --turbopack",
 		"start": "next start",
+		"studio": "drizzle-kit studio",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -23,21 +25,27 @@
 	"dependencies": {
 		"@hookform/resolvers": "^5.0.1",
 		"@tailwindcss/postcss": "^4.1.7",
+		"better-auth": "^1.2.8",
+		"drizzle-orm": "^0.43.1",
 		"lucide-react": "^0.511.0",
 		"next": "^15.3.2",
+		"pg": "^8.16.0",
 		"postcss": "^8.5.3",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
 		"react-hook-form": "^7.56.4",
 		"tailwind-variants": "^1.0.0",
 		"tailwindcss": "^4.1.7",
-		"zod": "^3.25.7"
+		"zod": "^3.25.7",
+		"zustand": "^5.0.5"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "^22.15.19",
+		"@types/pg": "^8.15.2",
 		"@types/react": "^19.1.4",
 		"@types/react-dom": "^19.1.5",
+		"drizzle-kit": "^0.31.1",
 		"typescript": "^5.8.3"
 	}
 }

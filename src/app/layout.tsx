@@ -1,6 +1,6 @@
-import HeaderComponent from "@/components/header";
 import "./globals.css";
 
+import HeaderComponent from "@/components/header";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 
