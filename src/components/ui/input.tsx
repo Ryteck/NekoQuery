@@ -123,10 +123,12 @@ export interface InputInputComponentProps extends ComponentProps<"input"> {
 export function Input({
 	className,
 	variants,
+	type,
 	...props
 }: InputInputComponentProps) {
 	return (
 		<input
+			type={type ?? "text"}
 			className={InputInputStyles({ className, ...variants })}
 			{...props}
 		/>

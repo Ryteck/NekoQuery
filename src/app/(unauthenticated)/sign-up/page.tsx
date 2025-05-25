@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	EyeIcon,
 	EyeOffIcon,
+	LoaderIcon,
 	LockIcon,
 	MailIcon,
 	User2Icon,
@@ -93,7 +94,6 @@ export default function Page() {
 
 						<InputUiComponent.Input
 							id="input-name"
-							type="text"
 							placeholder="John Doe"
 							variants={{ withPrefixIcon: true }}
 							{...form.register("name")}
@@ -244,7 +244,13 @@ export default function Page() {
 				</div>
 
 				{/* Submit Button */}
-				<ButtonComponent type="submit">Create account</ButtonComponent>
+				<ButtonComponent type="submit" disabled={form.formState.isSubmitting}>
+					{form.formState.isSubmitting ? (
+						<LoaderIcon className="animate-spin" />
+					) : (
+						"Create account"
+					)}
+				</ButtonComponent>
 
 				{/* Divider */}
 				<div className="relative">

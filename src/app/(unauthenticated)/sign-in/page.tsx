@@ -6,7 +6,13 @@ import ButtonComponent from "@/components/ui/button";
 import * as InputUiComponent from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
+import {
+	EyeIcon,
+	EyeOffIcon,
+	LoaderIcon,
+	LockIcon,
+	MailIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -156,7 +162,13 @@ export default function Page() {
 				</div>
 
 				{/* Submit Button */}
-				<ButtonComponent type="submit">Sign In</ButtonComponent>
+				<ButtonComponent type="submit" disabled={form.formState.isSubmitting}>
+					{form.formState.isSubmitting ? (
+						<LoaderIcon className="animate-spin" />
+					) : (
+						"Sign In"
+					)}
+				</ButtonComponent>
 
 				{/* Divider */}
 				<div className="relative">

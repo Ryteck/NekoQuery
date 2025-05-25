@@ -13,10 +13,14 @@ export default function Layout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en">
 			<body className="h-screen bg-gradient-to-tr from-neutral-950 via-purple-950 to-neutral-950 text-neutral-50">
-				<div className="h-full flex flex-col p-6 gap-24 overflow-auto">
+				<div className="h-full flex flex-col p-6 gap-10 overflow-auto">
 					<HeaderComponent />
 
 					<main className="container flex-1 mx-auto">{children}</main>
+
+					<footer className="flex justify-center text-neutral-400">
+						© 2025 Neko Query. All rights reserved.
+					</footer>
 				</div>
 			</body>
 		</html>
