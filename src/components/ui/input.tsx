@@ -105,8 +105,9 @@ export function PrefixIcon({
 
 const InputInputStyles = tv({
 	base: [
-		"block w-full pl-3 pr-3 py-2 bg-neutral-700 text-neutral-200 placeholder-neutral-400",
+		"block w-full pl-3 pr-3 py-2 bg-neutral-700 text-neutral-200 placeholder-neutral-500",
 		"border rounded-md border-neutral-600 focus:outline-none focus:ring-2 focus:ring-rose-600 focus:border-transparent",
+		"disabled:text-neutral-400",
 	],
 	variants: {
 		withPrefixIcon: { true: "pl-10" },

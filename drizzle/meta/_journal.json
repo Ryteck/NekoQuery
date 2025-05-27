@@ -15,6 +15,13 @@
       "when": 1748198678670,
       "tag": "0001_funny_sauron",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1748373806817,
+      "tag": "0002_perpetual_mister_sinister",
+      "breakpoints": true
     }
   ]
 }

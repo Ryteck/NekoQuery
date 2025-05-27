@@ -7,6 +7,7 @@ import { z } from "zod";
 
 const inputActionSchema = z.object({
 	name: z.string(),
+	nanoid: z.string(),
 });
 
 const outputActionSchema = z.object({

@@ -19,9 +19,8 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
 	const [projects, setProjects] = useState<ProjectData[]>([]);
-	const router = useRouter();
-
 	const [filter, setFilter] = useState("");
+	const router = useRouter();
 
 	useEffect(() => {
 		listProjectsByUserIdAction().then((arg) => {
@@ -66,7 +65,7 @@ export default function Page() {
 							key={arg.id}
 							className="border p-6 flex flex-col gap-4 rounded-lg bg-neutral-800 border-neutral-500 cursor-pointer hover:border-neutral-300"
 							onClick={() => {
-								alert(`Project ${arg}`);
+								router.push(`/projects/${arg.id}`);
 							}}
 							onKeyDown={() => {}}
 						>
@@ -75,8 +74,8 @@ export default function Page() {
 									<LayoutGridIcon size={32} />
 
 									<div className="flex flex-col text-sm">
-										<h3 className="max-w-46 truncate">{arg.name}</h3>
-										<span className="max-w-46 truncate">
+										<h3 className="max-w-36 truncate">{arg.name}</h3>
+										<span className="max-w-36 truncate">
 											/app/project/{arg.id}
 										</span>
 									</div>
@@ -92,7 +91,7 @@ export default function Page() {
 										className="transition-colors cursor-pointer w-6 h-6 text-neutral-300 hover:text-neutral-50 hover:bg-neutral-700 rounded"
 										onClick={(e) => {
 											e.stopPropagation();
-											alert(`Options ${arg}`);
+											alert(`Options ${arg.name}`);
 										}}
 									>
 										<EllipsisIcon />

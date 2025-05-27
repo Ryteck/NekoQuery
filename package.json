@@ -28,6 +28,7 @@
 		"better-auth": "^1.2.8",
 		"drizzle-orm": "^0.43.1",
 		"lucide-react": "^0.511.0",
+		"nanoid": "^5.1.5",
 		"next": "^15.3.2",
 		"next-safe-action": "^7.10.8",
 		"pg": "^8.16.0",

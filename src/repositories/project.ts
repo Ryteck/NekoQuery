@@ -1,4 +1,5 @@
 import { db } from "@/db";
+import { participant } from "@/db/schema/participant";
 import {
 	type InsertProjectData,
 	type ProjectData,
@@ -11,14 +12,30 @@ export const listProjectsByUserId = async (
 ): Promise<ProjectData[]> =>
 	db.select().from(project).where(eq(project.userId, userId));
 
+export const showProjectById = async (id: string): Promise<ProjectData> => {
+	const selecteds = await db.select().from(project).where(eq(project.id, id));
+	const selected = selecteds[0];
+	return selected;
+};
+
 export const createNewProject = async ({
 	name,
 	userId,
 }: Pick<InsertProjectData, "name" | "userId">): Promise<ProjectData> => {
-	const inserted = await db
-		.insert(project)
-		.values({ name, userId })
-		.returning();
+	return db.transaction(async (tx) => {
+		const inserteds = await tx
+			.insert(project)
+			.values({ name, userId })
+			.returning();
 
-	return inserted[0];
+		const inserted = inserteds[0];
+
+		await tx.insert(participant).values({
+			userId,
+			projectId: inserted.id,
+			role: "owner",
+		});
+
+		return inserted;
+	});
 };
