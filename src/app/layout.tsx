@@ -1,6 +1,7 @@
 import "./globals.css";
 
 import HeaderComponent from "@/components/header";
+import ThemeProviderComponent from "@/components/providers/theme";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 
@@ -11,17 +12,24 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: PropsWithChildren) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body className="h-screen bg-gradient-to-tr from-neutral-950 via-purple-950 to-neutral-950 text-neutral-50">
-				<div className="h-full flex flex-col p-6 gap-10 overflow-auto">
-					<HeaderComponent />
+				<ThemeProviderComponent
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<div className="h-full flex flex-col p-6 gap-10 overflow-auto">
+						<HeaderComponent />
 
-					<main className="container flex-1 mx-auto">{children}</main>
+						<main className="container flex-1 mx-auto">{children}</main>
 
-					<footer className="flex justify-center text-neutral-400">
-						© 2025 Neko Query. All rights reserved.
-					</footer>
-				</div>
+						<footer className="flex justify-center text-neutral-400">
+							© 2025 Neko Query. All rights reserved.
+						</footer>
+					</div>
+				</ThemeProviderComponent>
 			</body>
 		</html>
 	);

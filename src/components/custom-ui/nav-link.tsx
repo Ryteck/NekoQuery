@@ -14,9 +14,9 @@ const NavLinkStyles = tv({
 	},
 });
 
-export type NavLinkVariants = VariantProps<typeof NavLinkStyles>;
+type NavLinkVariants = VariantProps<typeof NavLinkStyles>;
 
-export interface NavLinkComponentProps extends ComponentProps<typeof Link> {
+interface NavLinkComponentProps extends ComponentProps<typeof Link> {
 	variants?: NavLinkVariants;
 }
 

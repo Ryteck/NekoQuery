@@ -4,8 +4,8 @@ import { gruppoFont } from "@/fonts/gruppo";
 import { authClient } from "@/lib/auth-client";
 import { LayoutDashboardIcon, LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import ButtonComponent from "./ui/button";
-import NavLinkComponent from "./ui/nav-link";
+import ButtonComponent from "./custom-ui/button";
+import NavLinkComponent from "./custom-ui/nav-link";
 
 export default function HeaderComponent() {
 	const router = useRouter();

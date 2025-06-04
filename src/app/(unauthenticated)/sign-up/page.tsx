@@ -1,9 +1,9 @@
 "use client";
 
 import SignUpTemplateAsset from "@/assets/sign-up-template.jpg";
+import ButtonComponent from "@/components/custom-ui/button";
+import * as InputUiComponent from "@/components/custom-ui/input";
 import SocialLoginComponent from "@/components/social-login";
-import ButtonComponent from "@/components/ui/button";
-import * as InputUiComponent from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {

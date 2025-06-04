@@ -1,8 +1,8 @@
 "use client";
 
 import { createProjectAction } from "@/actions/createProject";
-import ButtonComponent from "@/components/ui/button";
-import * as InputUiComponent from "@/components/ui/input";
+import ButtonComponent from "@/components/custom-ui/button";
+import * as InputUiComponent from "@/components/custom-ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	FolderRootIcon,

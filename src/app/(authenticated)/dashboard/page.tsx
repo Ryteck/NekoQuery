@@ -2,8 +2,8 @@
 
 import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
-import ButtonComponent from "@/components/ui/button";
-import * as InputUiComponent from "@/components/ui/input";
+import ButtonComponent from "@/components/custom-ui/button";
+import * as InputUiComponent from "@/components/custom-ui/input";
 import type { ProjectData } from "@/db/schema/project";
 import {
 	EllipsisIcon,
