@@ -25,8 +25,10 @@ export default function Layout({ children }: PropsWithChildren) {
 
 						<main className="container flex-1 mx-auto">{children}</main>
 
-						<footer className="flex justify-center text-neutral-400">
-							© 2025 Neko Query. All rights reserved.
+						<footer className="mx-auto">
+							<p className="text-muted-foreground text-sm">
+								© 2025 Neko Query. All rights reserved.
+							</p>
 						</footer>
 					</div>
 				</ThemeProviderComponent>

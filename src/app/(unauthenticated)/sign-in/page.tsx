@@ -1,9 +1,10 @@
 "use client";
 
 import SignInTemplateAsset from "@/assets/sign-in-template.jpg";
-import ButtonComponent from "@/components/custom-ui/button";
 import * as InputUiComponent from "@/components/custom-ui/input";
 import SocialLoginComponent from "@/components/social-login";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -142,12 +143,11 @@ export default function Page() {
 				{/* Remember Me & Forgot Password */}
 				<div className="flex items-center justify-between">
 					<div className="flex items-center">
-						<input
+						<Checkbox
 							id="custom-input-remember-me"
-							type="checkbox"
-							className="h-4 w-4 text-rose-600 focus:ring-rose-500 border-neutral-600 rounded bg-neutral-700 accent-rose-600"
 							{...form.register("rememberMe")}
 						/>
+
 						<label
 							htmlFor="custom-input-remember-me"
 							className="ml-2 block text-sm text-neutral-300"
@@ -162,13 +162,13 @@ export default function Page() {
 				</div>
 
 				{/* Submit Button */}
-				<ButtonComponent type="submit" disabled={form.formState.isSubmitting}>
+				<Button size="lg" type="submit" disabled={form.formState.isSubmitting}>
 					{form.formState.isSubmitting ? (
 						<LoaderIcon className="animate-spin" />
 					) : (
 						"Sign In"
 					)}
-				</ButtonComponent>
+				</Button>
 
 				{/* Divider */}
 				<div className="relative">

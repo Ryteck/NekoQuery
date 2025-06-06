@@ -1,9 +1,10 @@
 "use client";
 
 import SignUpTemplateAsset from "@/assets/sign-up-template.jpg";
-import ButtonComponent from "@/components/custom-ui/button";
 import * as InputUiComponent from "@/components/custom-ui/input";
 import SocialLoginComponent from "@/components/social-login";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -207,12 +208,11 @@ export default function Page() {
 				{/* Terms */}
 				<div className="flex flex-col gap-1l">
 					<div className="flex items-center">
-						<input
+						<Checkbox
 							id="custom-input-agree-terms"
-							type="checkbox"
-							className="h-4 w-4 text-rose-600 focus:ring-rose-500 border-neutral-600 rounded bg-neutral-700 accent-rose-600"
 							{...form.register("agreeToTerms")}
 						/>
+
 						<label
 							htmlFor="custom-input-agree-terms"
 							className="ml-2 block text-sm text-gray-300"
@@ -244,13 +244,13 @@ export default function Page() {
 				</div>
 
 				{/* Submit Button */}
-				<ButtonComponent type="submit" disabled={form.formState.isSubmitting}>
+				<Button size="lg" type="submit" disabled={form.formState.isSubmitting}>
 					{form.formState.isSubmitting ? (
 						<LoaderIcon className="animate-spin" />
 					) : (
 						"Create account"
 					)}
-				</ButtonComponent>
+				</Button>
 
 				{/* Divider */}
 				<div className="relative">

@@ -1,8 +1,8 @@
 "use client";
 
 import { createProjectAction } from "@/actions/createProject";
-import ButtonComponent from "@/components/custom-ui/button";
 import * as InputUiComponent from "@/components/custom-ui/input";
+import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	FolderRootIcon,
@@ -120,13 +120,13 @@ export default function Page() {
 				</InputUiComponent.Root>
 
 				{/* Submit Button */}
-				<ButtonComponent type="submit" disabled={form.formState.isSubmitting}>
+				<Button size="lg" type="submit" disabled={form.formState.isSubmitting}>
 					{form.formState.isSubmitting ? (
 						<LoaderIcon className="animate-spin" />
 					) : (
 						"Create project"
 					)}
-				</ButtonComponent>
+				</Button>
 			</form>
 		</div>
 	);

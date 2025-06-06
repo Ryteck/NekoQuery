@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useQueryState } from "@/hooks/queryState";
 import type { PropsWithChildren } from "react";
 
@@ -8,7 +9,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
 	return (
 		<div className="flex gap-4 h-full">
-			<div className="bg-neutral-900 p-4 flex flex-col divide-amber-500 divide-y rounded-xl">
+			<div className="bg-neutral-900 p-4 flex flex-col gap-2 rounded-xl h-fit">
 				{[
 					"Project",
 					"Schemas",
@@ -20,16 +21,16 @@ export default function Layout({ children }: PropsWithChildren) {
 					"Reports",
 					"Settings",
 				].map((item) => (
-					<button
+					<Button
 						type="button"
 						key={item}
+						variant="link"
 						data-active={tab === item.toLowerCase()}
 						disabled={tab === item.toLowerCase()}
-						className="text-amber-500 hover:text-amber-300 cursor-pointer data-[active=true]:text-amber-200 transition-colors disabled:pointer-events-none"
 						onClick={() => setTab(item.toLowerCase())}
 					>
 						{item}
-					</button>
+					</Button>
 				))}
 			</div>
 			{children}

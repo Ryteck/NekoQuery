@@ -2,8 +2,8 @@
 
 import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
-import ButtonComponent from "@/components/custom-ui/button";
 import * as InputUiComponent from "@/components/custom-ui/input";
+import { Button } from "@/components/ui/button";
 import type { ProjectData } from "@/db/schema/project";
 import {
 	EllipsisIcon,
@@ -47,13 +47,14 @@ export default function Page() {
 					</InputUiComponent.Core>
 				</InputUiComponent.Root>
 
-				<ButtonComponent
+				<Button
+					size="icon"
 					onClick={() => {
 						router.push("/projects");
 					}}
 				>
 					<PlusIcon />
-				</ButtonComponent>
+				</Button>
 			</div>
 			<div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-6">
 				{projects
@@ -86,16 +87,17 @@ export default function Page() {
 										<TrendingUpIcon />
 									</div>
 
-									<button
+									<Button
+										size="icon"
+										variant="outline"
 										type="button"
-										className="transition-colors cursor-pointer w-6 h-6 text-neutral-300 hover:text-neutral-50 hover:bg-neutral-700 rounded"
 										onClick={(e) => {
 											e.stopPropagation();
 											alert(`Options ${arg.name}`);
 										}}
 									>
 										<EllipsisIcon />
-									</button>
+									</Button>
 								</div>
 							</div>
 

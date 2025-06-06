@@ -3,9 +3,10 @@
 import { gruppoFont } from "@/fonts/gruppo";
 import { authClient } from "@/lib/auth-client";
 import { LayoutDashboardIcon, LogOutIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ButtonComponent from "./custom-ui/button";
-import NavLinkComponent from "./custom-ui/nav-link";
+import { ThemeModeToggleComponent } from "./theme-mode-toggle";
+import { Button } from "./ui/button";
 
 export default function HeaderComponent() {
 	const router = useRouter();
@@ -19,15 +20,23 @@ export default function HeaderComponent() {
 
 			<h2 className={`${gruppoFont.className} text-5xl`}>Neko Query</h2>
 
-			<div className="flex-1 flex gap-6 items-center justify-end">
-				<NavLinkComponent href="/">Home</NavLinkComponent>
-				<NavLinkComponent href="/about">About</NavLinkComponent>
+			<div className="flex-1 flex gap-2 items-center justify-end">
+				<Button variant="link" asChild>
+					<Link href="/">Home</Link>
+				</Button>
+
+				<Button variant="link" asChild>
+					<Link href="/about">About</Link>
+				</Button>
 
 				{hasSession && (
 					<>
-						<NavLinkComponent href="/dashboard">Dashboard</NavLinkComponent>
+						<Button variant="link" asChild>
+							<Link href="/dashboard">Dashboard</Link>
+						</Button>
 
-						<ButtonComponent
+						<Button
+							size="icon"
 							onClick={async () => {
 								await authClient.signOut({
 									fetchOptions: {
@@ -37,23 +46,27 @@ export default function HeaderComponent() {
 							}}
 						>
 							<LogOutIcon />
-						</ButtonComponent>
+						</Button>
 					</>
 				)}
 
 				{!hasSession && (
 					<>
-						<NavLinkComponent href="/sign-in">Sign In</NavLinkComponent>
+						<Button variant="link" asChild>
+							<Link href="/sign-in">Sign In</Link>
+						</Button>
 
-						<ButtonComponent
+						<Button
 							onClick={() => {
 								router.push("/sign-up");
 							}}
 						>
 							Get Start
-						</ButtonComponent>
+						</Button>
 					</>
 				)}
+
+				<ThemeModeToggleComponent />
 			</div>
 		</header>
 	);
