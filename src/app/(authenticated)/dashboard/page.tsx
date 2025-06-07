@@ -3,12 +3,21 @@
 import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
 import * as InputUiComponent from "@/components/custom-ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import type { ProjectData } from "@/db/schema/project";
 import {
 	EllipsisIcon,
 	GitMergeIcon,
-	LayoutGridIcon,
 	PlusIcon,
 	SearchIcon,
 	TrendingUpIcon,
@@ -62,27 +71,21 @@ export default function Page() {
 						arg.name.toLowerCase().includes(filter.toLowerCase()),
 					)
 					.map((arg) => (
-						<div
+						<Card
 							key={arg.id}
-							className="border p-6 flex flex-col gap-4 rounded-lg bg-neutral-800 border-neutral-500 cursor-pointer hover:border-neutral-300"
+							className="cursor-pointer hover:shadow-lg hover:border-neutral-500 transition-all"
 							onClick={() => {
 								router.push(`/projects/${arg.id}`);
 							}}
-							onKeyDown={() => {}}
 						>
-							<div className="flex gap-4">
-								<div className="w-full flex gap-2 items-center">
-									<LayoutGridIcon size={32} />
+							<CardHeader>
+								<CardTitle className="truncate">{arg.name}</CardTitle>
 
-									<div className="flex flex-col text-sm">
-										<h3 className="max-w-36 truncate">{arg.name}</h3>
-										<span className="max-w-36 truncate">
-											/app/project/{arg.id}
-										</span>
-									</div>
-								</div>
+								<CardDescription className="truncate">
+									/app/project/{arg.id}
+								</CardDescription>
 
-								<div className="flex gap-2 items-center">
+								<CardAction className="pl-4 flex gap-2 items-center">
 									<div className="w-8 h-8 border rounded-full p-2 flex items-center justify-center">
 										<TrendingUpIcon />
 									</div>
@@ -98,20 +101,20 @@ export default function Page() {
 									>
 										<EllipsisIcon />
 									</Button>
-								</div>
-							</div>
-
-							<div className="h-fit flex items-center gap-2 bg-neutral-950 w-fit py-1.5 px-3 text-sm rounded-full">
-								<Image
-									alt="GitHub Logo"
-									width={20}
-									height={20}
-									src={GithubMarkWhite}
-								/>
-								Ryteck/NekoQuery
-							</div>
-
-							<div className="flex flex-col text-sm text-neutral-400">
+								</CardAction>
+							</CardHeader>
+							<CardContent>
+								<Badge className="py-1.5 px-3">
+									<Image
+										alt="GitHub Logo"
+										width={20}
+										height={20}
+										src={GithubMarkWhite}
+									/>
+									Ryteck/NekoQuery
+								</Badge>
+							</CardContent>
+							<CardFooter className="flex flex-col text-muted-foreground text-sm">
 								<p className="w-full">qwerty</p>
 
 								<p className="w-full flex gap-1 items-center">
@@ -119,8 +122,8 @@ export default function Page() {
 									<GitMergeIcon size={16} />
 									main
 								</p>
-							</div>
-						</div>
+							</CardFooter>
+						</Card>
 					))}
 			</div>
 		</div>
