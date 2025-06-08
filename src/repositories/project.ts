@@ -6,21 +6,13 @@ import {
 	type ProjectData,
 	project,
 } from "@/db/schema/project";
+import type ShowProjectByIdReturn from "@/types/ShowProjectByIdReturn";
 import { and, eq } from "drizzle-orm";
 
 export async function listProjectsByUserId(
 	userId: string,
 ): Promise<ProjectData[]> {
 	return db.select().from(project).where(eq(project.userId, userId));
-}
-
-export interface ShowProjectByIdReturn extends ProjectData {
-	members: Array<{
-		userId: string;
-		userName: string;
-		participantId: string;
-		participantRole: string;
-	}>;
 }
 
 export async function showProjectById(

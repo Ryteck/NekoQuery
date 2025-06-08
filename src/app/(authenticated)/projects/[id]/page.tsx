@@ -1,24 +1,16 @@
-import { showProjectById } from "@/repositories/project";
+"use client";
 
-interface Params {
-	id: string;
-}
+import { useProjectStore } from "@/stores/project";
 
-interface Props {
-	params: Promise<Params>;
-}
-
-export default async function Page(props: Props) {
-	const params = await props.params;
-
-	const project = await showProjectById(params.id);
+export default function Page() {
+	const projectStore = useProjectStore();
 
 	return (
 		<div className="flex flex-col gap-2">
 			<h3>Project:</h3>
 
 			<pre>
-				<code>{JSON.stringify(project, null, 2)}</code>
+				<code>{JSON.stringify(projectStore.project, null, 2)}</code>
 			</pre>
 		</div>
 	);
