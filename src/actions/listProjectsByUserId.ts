@@ -19,5 +19,5 @@ export const listProjectsByUserIdAction = actionClient
 	.outputSchema(outputActionSchema)
 	.action(async () => {
 		const session = await getSessionFunction();
-		return await listProjectsByUserId(session.user.id);
+		return listProjectsByUserId(session.user.id);
 	});

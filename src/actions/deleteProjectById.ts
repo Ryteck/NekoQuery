@@ -2,13 +2,10 @@
 
 import { getSessionFunction } from "@/functions/getSession";
 import { actionClient } from "@/lib/safe-action";
-import { createNewProject } from "@/repositories/project";
+import { deleteProjectById } from "@/repositories/project";
 import { z } from "zod";
 
-const inputActionSchema = z.object({
-	name: z.string(),
-	nanoid: z.string(),
-});
+const inputActionSchema = z.string().uuid();
 
 const outputActionSchema = z.object({
 	id: z.string(),
@@ -18,14 +15,14 @@ const outputActionSchema = z.object({
 	updatedAt: z.date(),
 });
 
-export const createProjectAction = actionClient
+export const deleteProjectByIdAction = actionClient
 	.schema(inputActionSchema)
 	.outputSchema(outputActionSchema)
 	.action(async ({ parsedInput }) => {
 		const session = await getSessionFunction();
 
-		return createNewProject({
-			name: parsedInput.name,
+		return deleteProjectById({
+			id: parsedInput,
 			userId: session.user.id,
 		});
 	});

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className="h-screen bg-gradient-to-tr from-neutral-950 via-purple-950 to-neutral-950 text-neutral-50">
+			<body className="h-screen dark:bg-gradient-to-tr dark:from-neutral-950 dark:via-purple-950 dark:to-neutral-950">
 				<ThemeProviderComponent
 					attribute="class"
 					defaultTheme="system"

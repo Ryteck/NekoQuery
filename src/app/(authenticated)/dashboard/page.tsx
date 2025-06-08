@@ -1,7 +1,18 @@
 "use client";
 
+import { deleteProjectByIdAction } from "@/actions/deleteProjectById";
 import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,13 +24,23 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuShortcut,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { ProjectData } from "@/db/schema/project";
 import {
+	ArrowRightIcon,
 	EllipsisIcon,
 	GitMergeIcon,
 	PlusIcon,
 	SearchIcon,
+	TrashIcon,
 	TrendingUpIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -29,12 +50,20 @@ import { useEffect, useState } from "react";
 export default function Page() {
 	const [projects, setProjects] = useState<ProjectData[]>([]);
 	const [filter, setFilter] = useState("");
+
+	const [selectedProjectIdForDelete, setSelectedProjectIdForDelete] =
+		useState("");
+
 	const router = useRouter();
 
+	async function loadProjects() {
+		const projects = await listProjectsByUserIdAction();
+		if (projects?.data) setProjects(projects.data);
+	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		listProjectsByUserIdAction().then((arg) => {
-			if (arg?.data) setProjects(arg.data);
-		});
+		loadProjects();
 	}, []);
 
 	return (
@@ -67,13 +96,7 @@ export default function Page() {
 						arg.name.toLowerCase().includes(filter.toLowerCase()),
 					)
 					.map((arg) => (
-						<Card
-							key={arg.id}
-							className="cursor-pointer hover:shadow-lg hover:border-neutral-500 transition-all"
-							onClick={() => {
-								router.push(`/projects/${arg.id}`);
-							}}
-						>
+						<Card key={arg.id}>
 							<CardHeader>
 								<CardTitle className="truncate">{arg.name}</CardTitle>
 
@@ -86,17 +109,76 @@ export default function Page() {
 										<TrendingUpIcon />
 									</div>
 
-									<Button
-										size="icon"
-										variant="outline"
-										type="button"
-										onClick={(e) => {
-											e.stopPropagation();
-											alert(`Options ${arg.name}`);
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button size="icon" variant="outline" type="button">
+												<EllipsisIcon />
+											</Button>
+										</DropdownMenuTrigger>
+
+										<DropdownMenuContent>
+											<DropdownMenuLabel>Project options</DropdownMenuLabel>
+
+											<DropdownMenuItem
+												onClick={() => {
+													router.push(`/projects/${arg.id}`);
+												}}
+											>
+												Access
+												<DropdownMenuShortcut>
+													<ArrowRightIcon />
+												</DropdownMenuShortcut>
+											</DropdownMenuItem>
+
+											<DropdownMenuItem
+												variant="destructive"
+												onClick={() => {
+													setSelectedProjectIdForDelete(arg.id);
+												}}
+											>
+												Delete
+												<DropdownMenuShortcut>
+													<TrashIcon />
+												</DropdownMenuShortcut>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+
+									<AlertDialog
+										open={selectedProjectIdForDelete !== ""}
+										onOpenChange={(open) => {
+											if (!open) {
+												setSelectedProjectIdForDelete("");
+											}
 										}}
 									>
-										<EllipsisIcon />
-									</Button>
+										<AlertDialogContent>
+											<AlertDialogHeader>
+												<AlertDialogTitle>
+													Are you sure you want to delete this project?
+												</AlertDialogTitle>
+												<AlertDialogDescription>
+													This action is irreversible. The project will be
+													permanently removed and all associated data will be
+													lost.
+												</AlertDialogDescription>
+											</AlertDialogHeader>
+											<AlertDialogFooter>
+												<AlertDialogCancel>Cancel</AlertDialogCancel>
+												<AlertDialogAction
+													onClick={async () => {
+														await deleteProjectByIdAction(
+															selectedProjectIdForDelete,
+														);
+
+														await loadProjects();
+													}}
+												>
+													Continue
+												</AlertDialogAction>
+											</AlertDialogFooter>
+										</AlertDialogContent>
+									</AlertDialog>
 								</CardAction>
 							</CardHeader>
 							<CardContent>

@@ -38,7 +38,7 @@ const formSchema = z.object({
 	password: z.string().min(8, {
 		message: "Password must be at least 8 characters long.",
 	}),
-	rememberMe: z.coerce.boolean(),
+	rememberMe: z.boolean(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -47,6 +47,11 @@ export default function Page() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const form = useForm({
+		defaultValues: {
+			email: "",
+			password: "",
+			rememberMe: false,
+		},
 		resolver: zodResolver(formSchema),
 	});
 
@@ -208,7 +213,7 @@ export default function Page() {
 								<div className="w-full border-t border-neutral-600" />
 							</div>
 							<div className="relative flex justify-center text-sm">
-								<span className="px-2 bg-neutral-800 text-neutral-400">
+								<span className="px-2 bg-card text-neutral-400">
 									Or continue with
 								</span>
 							</div>

@@ -6,12 +6,13 @@ import {
 	type ProjectData,
 	project,
 } from "@/db/schema/project";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
-export const listProjectsByUserId = async (
+export async function listProjectsByUserId(
 	userId: string,
-): Promise<ProjectData[]> =>
-	db.select().from(project).where(eq(project.userId, userId));
+): Promise<ProjectData[]> {
+	return db.select().from(project).where(eq(project.userId, userId));
+}
 
 export interface ShowProjectByIdReturn extends ProjectData {
 	members: Array<{
@@ -22,9 +23,9 @@ export interface ShowProjectByIdReturn extends ProjectData {
 	}>;
 }
 
-export const showProjectById = async (
+export async function showProjectById(
 	id: string,
-): Promise<ShowProjectByIdReturn> => {
+): Promise<ShowProjectByIdReturn> {
 	const selectedProjects = await db
 		.select()
 		.from(project)
@@ -46,12 +47,12 @@ export const showProjectById = async (
 		.where(eq(participant.projectId, selectedProject.id));
 
 	return { ...selectedProject, members: selectedMembers };
-};
+}
 
-export const createNewProject = async ({
+export async function createNewProject({
 	name,
 	userId,
-}: Pick<InsertProjectData, "name" | "userId">): Promise<ProjectData> => {
+}: Pick<InsertProjectData, "name" | "userId">): Promise<ProjectData> {
 	return db.transaction(async (tx) => {
 		const inserteds = await tx
 			.insert(project)
@@ -68,4 +69,18 @@ export const createNewProject = async ({
 
 		return inserted;
 	});
-};
+}
+
+export async function deleteProjectById({
+	id,
+	userId,
+}: Pick<ProjectData, "id" | "userId">): Promise<ProjectData> {
+	const deleted = await db
+		.delete(project)
+		.where(and(eq(project.id, id), eq(project.userId, userId)))
+		.returning();
+
+	if (deleted.length === 0) throw new Error("Project not found");
+
+	return deleted[0];
+}

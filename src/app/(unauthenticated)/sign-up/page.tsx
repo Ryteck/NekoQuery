@@ -46,7 +46,7 @@ const formSchema = z
 		confirmPassword: z.string().min(8, {
 			message: "Please confirm your password (minimum 8 characters).",
 		}),
-		agreeToTerms: z.coerce.boolean().refine((arg) => arg, {
+		agreeToTerms: z.boolean().refine((arg) => arg, {
 			message: "You must agree to the terms and conditions.",
 		}),
 	})
@@ -61,6 +61,13 @@ export default function Page() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const form = useForm({
+		defaultValues: {
+			name: "",
+			email: "",
+			password: "",
+			confirmPassword: "",
+			agreeToTerms: false,
+		},
 		resolver: zodResolver(formSchema),
 	});
 
@@ -291,7 +298,7 @@ export default function Page() {
 								<div className="w-full border-t border-neutral-600" />
 							</div>
 							<div className="relative flex justify-center text-sm">
-								<span className="px-2 bg-neutral-800 text-neutral-400">
+								<span className="px-2 bg-card text-neutral-400">
 									Or sign up with
 								</span>
 							</div>
