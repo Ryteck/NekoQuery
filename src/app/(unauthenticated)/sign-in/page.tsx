@@ -1,7 +1,6 @@
 "use client";
 
 import SignInTemplateAsset from "@/assets/sign-in-template.jpg";
-import * as InputUiComponent from "@/components/custom-ui/input";
 import SocialLoginComponent from "@/components/social-login";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,11 +8,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -89,71 +90,78 @@ export default function Page() {
 						</p>
 
 						{/* Email Field */}
-						<InputUiComponent.Root>
-							<InputUiComponent.Label
-								htmlFor="custom-input-email"
-								variants={{ error: !!form.formState.errors.email }}
-							>
-								Email
-							</InputUiComponent.Label>
-							<InputUiComponent.Core>
-								<InputUiComponent.PrefixIcon>
-									<MailIcon size={18} />
-								</InputUiComponent.PrefixIcon>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
 
-								<InputUiComponent.Input
-									id="custom-input-email"
-									type="email"
-									placeholder="your@email.com"
-									variants={{ withPrefixIcon: true }}
-									{...form.register("email")}
-								/>
-							</InputUiComponent.Core>
+									<FormControl>
+										<div className="relative">
+											<MailIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-							<InputUiComponent.ErrorMessage>
-								{form.formState.errors.email?.message}
-							</InputUiComponent.ErrorMessage>
-						</InputUiComponent.Root>
+											<Input
+												type="email"
+												className="pl-9"
+												placeholder="your@email.com"
+												{...field}
+											/>
+										</div>
+									</FormControl>
+
+									<FormDescription>Your login email address.</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						{/* Password Field */}
-						<InputUiComponent.Root>
-							<InputUiComponent.Label
-								htmlFor="custom-input-password"
-								variants={{ error: !!form.formState.errors.password }}
-							>
-								Password
-							</InputUiComponent.Label>
-							<InputUiComponent.Core>
-								<InputUiComponent.PrefixIcon>
-									<LockIcon size={18} />
-								</InputUiComponent.PrefixIcon>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
 
-								<InputUiComponent.Input
-									id="custom-input-password"
-									type={showPassword ? "text" : "password"}
-									placeholder="••••••••"
-									variants={{
-										withPrefixIcon: true,
-										withActionIcon: true,
-									}}
-									{...form.register("password")}
-								/>
+									<FormControl>
+										<div className="relative">
+											<LockIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-								<InputUiComponent.ActionIcon
-									onClick={() => setShowPassword((state) => !state)}
-								>
-									{showPassword ? (
-										<EyeIcon size={18} />
-									) : (
-										<EyeOffIcon size={18} />
-									)}
-								</InputUiComponent.ActionIcon>
-							</InputUiComponent.Core>
+											<Input
+												type={showPassword ? "text" : "password"}
+												className="pl-9 pr-9"
+												placeholder="••••••••"
+												{...field}
+											/>
 
-							<InputUiComponent.ErrorMessage>
-								{form.formState.errors.password?.message}
-							</InputUiComponent.ErrorMessage>
-						</InputUiComponent.Root>
+											<Button
+												type="button"
+												className="absolute top-0 right-0"
+												size="icon"
+												variant="ghost"
+												onClick={() => setShowPassword((state) => !state)}
+											>
+												{showPassword ? (
+													<EyeIcon size={18} />
+												) : (
+													<EyeOffIcon size={18} />
+												)}
+											</Button>
+										</div>
+									</FormControl>
+
+									<FormDescription>Your account password.</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						{/* Remember Me & Forgot Password */}
 						<FormField

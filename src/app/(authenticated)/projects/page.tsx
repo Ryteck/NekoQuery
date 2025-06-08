@@ -1,15 +1,26 @@
 "use client";
 
 import { createProjectAction } from "@/actions/createProject";
-import * as InputUiComponent from "@/components/custom-ui/input";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	FolderRootIcon,
-	IdCardIcon,
-	LoaderIcon,
-	RefreshCwIcon,
-} from "lucide-react";
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FolderRootIcon, LoaderIcon, RefreshCwIcon } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -44,90 +55,107 @@ export default function Page() {
 	}
 
 	return (
-		<div className="flex gap-8 bg-neutral-800 rounded-2xl p-8 mx-auto w-fit">
-			{/* Sign Up Form */}
-			<form
-				className="mx-auto flex flex-col gap-6 min-w-[480px]"
-				onSubmit={form.handleSubmit(handleCreateProject)}
-			>
-				<h3 className="text-2xl">Create Project</h3>
-				<p className="text-sm">
+		<Card className="w-fit mx-auto">
+			<CardHeader>
+				<CardTitle>Create Project</CardTitle>
+				<CardDescription>
 					Fill out the details below to create a new project.
-				</p>
+				</CardDescription>
+			</CardHeader>
 
-				{/* Project Name Field */}
-				<InputUiComponent.Root>
-					<InputUiComponent.Label
-						htmlFor="input-name"
-						variants={{ error: !!form.formState.errors.name }}
+			<CardContent>
+				{/* Sign Up Form */}
+				<Form {...form}>
+					<form
+						className="mx-auto flex flex-col gap-6 min-w-[480px]"
+						onSubmit={form.handleSubmit(handleCreateProject)}
 					>
-						Project Name
-					</InputUiComponent.Label>
-					<InputUiComponent.Core>
-						<InputUiComponent.PrefixIcon>
-							<FolderRootIcon size={18} />
-						</InputUiComponent.PrefixIcon>
+						{/* Project Name Field */}
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Project Name</FormLabel>
 
-						<InputUiComponent.Input
-							id="input-name"
-							placeholder="Neko Query"
-							variants={{ withPrefixIcon: true }}
-							{...form.register("name")}
-						/>
-					</InputUiComponent.Core>
+									<FormControl>
+										<div className="relative">
+											<FolderRootIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-					<InputUiComponent.ErrorMessage>
-						{form.formState.errors.name?.message}
-					</InputUiComponent.ErrorMessage>
-				</InputUiComponent.Root>
+											<Input
+												className="pl-9"
+												placeholder="Neko Query"
+												{...field}
+											/>
+										</div>
+									</FormControl>
 
-				{/* Project Nanoid Field */}
-				<InputUiComponent.Root>
-					<InputUiComponent.Label
-						htmlFor="input-nanoid"
-						variants={{ error: !!form.formState.errors.nanoid }}
-					>
-						Project Nanoid
-					</InputUiComponent.Label>
-					<InputUiComponent.Core>
-						<InputUiComponent.PrefixIcon>
-							<IdCardIcon size={18} />
-						</InputUiComponent.PrefixIcon>
-
-						<InputUiComponent.Input
-							id="input-nanoid"
-							placeholder="Neko Query"
-							variants={{
-								withPrefixIcon: true,
-								withActionIcon: true,
-							}}
-							disabled
-							{...form.register("nanoid")}
+									<FormDescription>
+										Choose a name to identify your project.
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
 						/>
 
-						<InputUiComponent.ActionIcon
-							onClick={() => {
-								form.setValue("nanoid", nanoid());
-							}}
+						{/* Project Nanoid Field */}
+						<FormField
+							control={form.control}
+							name="nanoid"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Project Nanoid</FormLabel>
+
+									<FormControl>
+										<div className="relative">
+											<FolderRootIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
+
+											<Input className="pl-9 pr-9" disabled {...field} />
+
+											<Button
+												type="button"
+												className="absolute top-0 right-0"
+												size="icon"
+												variant="ghost"
+												onClick={() => {
+													form.setValue("nanoid", nanoid());
+												}}
+											>
+												<RefreshCwIcon />
+											</Button>
+										</div>
+									</FormControl>
+
+									<FormDescription>
+										Unique project ID used internally. Click the icon to
+										generate a new one.
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						{/* Submit Button */}
+						<Button
+							size="lg"
+							type="submit"
+							disabled={form.formState.isSubmitting}
 						>
-							<RefreshCwIcon size={18} />
-						</InputUiComponent.ActionIcon>
-					</InputUiComponent.Core>
-
-					<InputUiComponent.ErrorMessage>
-						{form.formState.errors.nanoid?.message}
-					</InputUiComponent.ErrorMessage>
-				</InputUiComponent.Root>
-
-				{/* Submit Button */}
-				<Button size="lg" type="submit" disabled={form.formState.isSubmitting}>
-					{form.formState.isSubmitting ? (
-						<LoaderIcon className="animate-spin" />
-					) : (
-						"Create project"
-					)}
-				</Button>
-			</form>
-		</div>
+							{form.formState.isSubmitting ? (
+								<LoaderIcon className="animate-spin" />
+							) : (
+								"Create project"
+							)}
+						</Button>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
 	);
 }

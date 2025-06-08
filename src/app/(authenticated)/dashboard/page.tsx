@@ -2,7 +2,6 @@
 
 import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
-import * as InputUiComponent from "@/components/custom-ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +13,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import type { ProjectData } from "@/db/schema/project";
 import {
 	EllipsisIcon,
@@ -40,21 +40,17 @@ export default function Page() {
 	return (
 		<div className="flex flex-col gap-8">
 			<div className="flex gap-4 items-center">
-				<InputUiComponent.Root className="w-full">
-					<InputUiComponent.Core>
-						<InputUiComponent.PrefixIcon>
-							<SearchIcon size={18} />
-						</InputUiComponent.PrefixIcon>
+				<div className="relative w-full">
+					<SearchIcon className="absolute top-2 left-2 text-input" size={20} />
 
-						<InputUiComponent.Input
-							className="bg-neutral-800"
-							placeholder="Search..."
-							variants={{ withPrefixIcon: true }}
-							value={filter}
-							onChange={(e) => setFilter(e.target.value)}
-						/>
-					</InputUiComponent.Core>
-				</InputUiComponent.Root>
+					<Input
+						type="email"
+						className="pl-9"
+						placeholder="Search..."
+						value={filter}
+						onChange={(e) => setFilter(e.target.value)}
+					/>
+				</div>
 
 				<Button
 					size="icon"

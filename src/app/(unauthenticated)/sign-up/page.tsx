@@ -1,7 +1,6 @@
 "use client";
 
 import SignUpTemplateAsset from "@/assets/sign-up-template.jpg";
-import * as InputUiComponent from "@/components/custom-ui/input";
 import SocialLoginComponent from "@/components/social-login";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,11 +8,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -92,137 +93,153 @@ export default function Page() {
 						</p>
 
 						{/* Full Name Field */}
-						<InputUiComponent.Root>
-							<InputUiComponent.Label
-								htmlFor="input-name"
-								variants={{ error: !!form.formState.errors.name }}
-							>
-								Full Name
-							</InputUiComponent.Label>
-							<InputUiComponent.Core>
-								<InputUiComponent.PrefixIcon>
-									<User2Icon size={18} />
-								</InputUiComponent.PrefixIcon>
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Full Name</FormLabel>
 
-								<InputUiComponent.Input
-									id="input-name"
-									placeholder="John Doe"
-									variants={{ withPrefixIcon: true }}
-									{...form.register("name")}
-								/>
-							</InputUiComponent.Core>
+									<FormControl>
+										<div className="relative">
+											<User2Icon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-							<InputUiComponent.ErrorMessage>
-								{form.formState.errors.name?.message}
-							</InputUiComponent.ErrorMessage>
-						</InputUiComponent.Root>
+											<Input
+												className="pl-9"
+												placeholder="John Doe"
+												{...field}
+											/>
+										</div>
+									</FormControl>
+
+									<FormDescription>Enter your full name.</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						{/* Email Field */}
-						<InputUiComponent.Root>
-							<InputUiComponent.Label
-								htmlFor="input-email"
-								variants={{ error: !!form.formState.errors.email }}
-							>
-								Email
-							</InputUiComponent.Label>
-							<InputUiComponent.Core>
-								<InputUiComponent.PrefixIcon>
-									<MailIcon size={18} />
-								</InputUiComponent.PrefixIcon>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
 
-								<InputUiComponent.Input
-									id="input-email"
-									type="email"
-									placeholder="your@email.com"
-									variants={{ withPrefixIcon: true }}
-									{...form.register("email")}
-								/>
-							</InputUiComponent.Core>
+									<FormControl>
+										<div className="relative">
+											<MailIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-							<InputUiComponent.ErrorMessage>
-								{form.formState.errors.email?.message}
-							</InputUiComponent.ErrorMessage>
-						</InputUiComponent.Root>
+											<Input
+												type="email"
+												className="pl-9"
+												placeholder="your@email.com"
+												{...field}
+											/>
+										</div>
+									</FormControl>
+
+									<FormDescription>Enter your email address.</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						{/* Password Field */}
-						<InputUiComponent.Root>
-							<InputUiComponent.Label
-								htmlFor="input-password"
-								variants={{ error: !!form.formState.errors.password }}
-							>
-								Password
-							</InputUiComponent.Label>
-							<InputUiComponent.Core>
-								<InputUiComponent.PrefixIcon>
-									<LockIcon size={18} />
-								</InputUiComponent.PrefixIcon>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
 
-								<InputUiComponent.Input
-									id="input-password"
-									type={showPassword ? "text" : "password"}
-									placeholder="••••••••"
-									variants={{
-										withPrefixIcon: true,
-										withActionIcon: true,
-									}}
-									{...form.register("password")}
-								/>
+									<FormControl>
+										<div className="relative">
+											<LockIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-								<InputUiComponent.ActionIcon
-									onClick={() => setShowPassword((state) => !state)}
-								>
-									{showPassword ? (
-										<EyeIcon size={18} />
-									) : (
-										<EyeOffIcon size={18} />
-									)}
-								</InputUiComponent.ActionIcon>
-							</InputUiComponent.Core>
+											<Input
+												type={showPassword ? "text" : "password"}
+												className="pl-9 pr-9"
+												placeholder="••••••••"
+												{...field}
+											/>
 
-							<InputUiComponent.ErrorMessage>
-								{form.formState.errors.password?.message}
-							</InputUiComponent.ErrorMessage>
-						</InputUiComponent.Root>
+											<Button
+												type="button"
+												className="absolute top-0 right-0"
+												size="icon"
+												variant="ghost"
+												onClick={() => setShowPassword((state) => !state)}
+											>
+												{showPassword ? (
+													<EyeIcon size={18} />
+												) : (
+													<EyeOffIcon size={18} />
+												)}
+											</Button>
+										</div>
+									</FormControl>
+
+									<FormDescription>Create a secure password.</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						{/*  Confirm Password Field */}
-						<InputUiComponent.Root>
-							<InputUiComponent.Label
-								htmlFor="input-confirm-password"
-								variants={{ error: !!form.formState.errors.confirmPassword }}
-							>
-								Confirm Password
-							</InputUiComponent.Label>
-							<InputUiComponent.Core>
-								<InputUiComponent.PrefixIcon>
-									<LockIcon size={18} />
-								</InputUiComponent.PrefixIcon>
+						<FormField
+							control={form.control}
+							name="confirmPassword"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Confirm Password</FormLabel>
 
-								<InputUiComponent.Input
-									id="input-confirm-password"
-									type={showPassword ? "text" : "password"}
-									placeholder="••••••••"
-									variants={{
-										withPrefixIcon: true,
-										withActionIcon: true,
-									}}
-									{...form.register("confirmPassword")}
-								/>
+									<FormControl>
+										<div className="relative">
+											<LockIcon
+												className="absolute top-2 left-2 text-input"
+												size={20}
+											/>
 
-								<InputUiComponent.ActionIcon
-									onClick={() => setShowPassword((state) => !state)}
-								>
-									{showPassword ? (
-										<EyeIcon size={18} />
-									) : (
-										<EyeOffIcon size={18} />
-									)}
-								</InputUiComponent.ActionIcon>
-							</InputUiComponent.Core>
+											<Input
+												type={showPassword ? "text" : "password"}
+												className="pl-9 pr-9"
+												placeholder="••••••••"
+												{...field}
+											/>
 
-							<InputUiComponent.ErrorMessage>
-								{form.formState.errors.confirmPassword?.message}
-							</InputUiComponent.ErrorMessage>
-						</InputUiComponent.Root>
+											<Button
+												type="button"
+												className="absolute top-0 right-0"
+												size="icon"
+												variant="ghost"
+												onClick={() => setShowPassword((state) => !state)}
+											>
+												{showPassword ? (
+													<EyeIcon size={18} />
+												) : (
+													<EyeOffIcon size={18} />
+												)}
+											</Button>
+										</div>
+									</FormControl>
+
+									<FormDescription>
+										Repeat the password to confirm.
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
 						{/* Terms */}
 						<FormField
