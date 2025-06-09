@@ -72,7 +72,7 @@ export default function Page() {
 
 	return (
 		<Card>
-			<CardContent className="flex gap-8 w-fit lg:w-full">
+			<CardContent className="flex gap-8 w-full">
 				<div className="flex-1 rounded-2xl relative overflow-hidden hidden lg:block">
 					<Image
 						alt=""
@@ -87,7 +87,7 @@ export default function Page() {
 				{/* Sign In Form */}
 				<Form {...form}>
 					<form
-						className="mx-auto flex flex-col gap-6 w-[480px]"
+						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"
 						onSubmit={form.handleSubmit(handleSignIn)}
 					>
 						<h3 className="text-2xl">Sign In</h3>

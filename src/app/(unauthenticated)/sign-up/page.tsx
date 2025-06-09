@@ -88,11 +88,11 @@ export default function Page() {
 
 	return (
 		<Card className="mx-a">
-			<CardContent className="flex gap-8 w-fit lg:w-full">
+			<CardContent className="flex gap-8 w-full">
 				{/* Sign Up Form */}
 				<Form {...form}>
 					<form
-						className="mx-auto flex flex-col gap-6 min-w-[480px]"
+						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"
 						onSubmit={form.handleSubmit(handleSignUp)}
 					>
 						<h3 className="text-2xl">Sign Up</h3>
