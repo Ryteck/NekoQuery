@@ -15,6 +15,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -209,9 +210,8 @@ export default function Page() {
 
 						{/* Divider */}
 						<div className="relative">
-							<div className="absolute inset-0 flex items-center">
-								<div className="w-full border-t border-neutral-600" />
-							</div>
+							<Separator className="absolute mt-2.5 inset-0 flex items-center" />
+
 							<div className="relative flex justify-center text-sm">
 								<span className="px-2 bg-card text-neutral-400">
 									Or continue with
@@ -222,18 +222,18 @@ export default function Page() {
 						{/* Social Login */}
 						<SocialLoginComponent />
 
-						<div className="flex justify-center w-full border-t border-neutral-600 py-4">
-							<p className="text-center text-xs text-neutral-500">
-								Powered by{" "}
-								<Link
-									href="https://better-auth.com"
-									className="underline"
-									target="_blank"
-								>
-									<span className="text-orange-500">better-auth</span>.
-								</Link>
-							</p>
-						</div>
+						<Separator />
+
+						<p className="text-center text-xs text-neutral-500">
+							Powered by{" "}
+							<Link
+								href="https://better-auth.com"
+								className="underline"
+								target="_blank"
+							>
+								<span className="text-orange-500">better-auth</span>.
+							</Link>
+						</p>
 					</form>
 				</Form>
 			</CardContent>

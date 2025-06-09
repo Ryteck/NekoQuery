@@ -1,7 +1,9 @@
+import { AppSidebarComponent } from "@/components/app-sidebar";
 import "./globals.css";
 
 import HeaderComponent from "@/components/header";
 import ThemeProviderComponent from "@/components/providers/theme";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 
@@ -20,17 +22,21 @@ export default function Layout({ children }: PropsWithChildren) {
 					enableSystem
 					disableTransitionOnChange
 				>
-					<div className="h-full flex flex-col p-6 gap-10 overflow-auto">
-						<HeaderComponent />
+					<SidebarProvider>
+						<AppSidebarComponent />
 
-						<main className="container flex-1 mx-auto">{children}</main>
+						<div className="h-screen w-full flex flex-col p-6 gap-6 overflow-auto">
+							<HeaderComponent />
 
-						<footer className="mx-auto">
-							<p className="text-muted-foreground text-sm">
-								© 2025 Neko Query. All rights reserved.
-							</p>
-						</footer>
-					</div>
+							<main className="container flex-1 mx-auto">{children}</main>
+
+							<footer className="mx-auto">
+								<p className="text-muted-foreground text-sm">
+									© 2025 Neko Query. All rights reserved.
+								</p>
+							</footer>
+						</div>
+					</SidebarProvider>
 				</ThemeProviderComponent>
 			</body>
 		</html>

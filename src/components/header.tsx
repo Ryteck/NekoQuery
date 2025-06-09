@@ -2,10 +2,9 @@
 
 import { gruppoFont } from "@/fonts/gruppo";
 import { authClient } from "@/lib/auth-client";
-import { LayoutDashboardIcon, LogOutIcon } from "lucide-react";
+import { LayoutDashboardIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ThemeModeToggleComponent } from "./theme-mode-toggle";
 import { Button } from "./ui/button";
 
 export default function HeaderComponent() {
@@ -14,7 +13,9 @@ export default function HeaderComponent() {
 	const session = authClient.useSession();
 	const hasSession = session.data !== null;
 
-	return session.isPending ? null : (
+	if (hasSession) return null;
+
+	return (
 		<header className="flex gap-6 items-center">
 			<LayoutDashboardIcon size={48} absoluteStrokeWidth />
 
@@ -29,44 +30,17 @@ export default function HeaderComponent() {
 					<Link href="/about">About</Link>
 				</Button>
 
-				{hasSession && (
-					<>
-						<Button variant="link" asChild>
-							<Link href="/dashboard">Dashboard</Link>
-						</Button>
+				<Button variant="link" asChild>
+					<Link href="/sign-in">Sign In</Link>
+				</Button>
 
-						<Button
-							size="icon"
-							onClick={async () => {
-								await authClient.signOut({
-									fetchOptions: {
-										onSuccess: () => router.push("/"),
-									},
-								});
-							}}
-						>
-							<LogOutIcon />
-						</Button>
-					</>
-				)}
-
-				{!hasSession && (
-					<>
-						<Button variant="link" asChild>
-							<Link href="/sign-in">Sign In</Link>
-						</Button>
-
-						<Button
-							onClick={() => {
-								router.push("/sign-up");
-							}}
-						>
-							Get Start
-						</Button>
-					</>
-				)}
-
-				<ThemeModeToggleComponent />
+				<Button
+					onClick={() => {
+						router.push("/sign-up");
+					}}
+				>
+					Get Start
+				</Button>
 			</div>
 		</header>
 	);

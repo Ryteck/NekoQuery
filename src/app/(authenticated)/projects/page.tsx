@@ -20,7 +20,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FolderRootIcon, LoaderIcon, RefreshCwIcon } from "lucide-react";
+import {
+	FolderRootIcon,
+	IdCardIcon,
+	LoaderIcon,
+	RefreshCwIcon,
+} from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -112,7 +117,7 @@ export default function Page() {
 
 									<FormControl>
 										<div className="relative">
-											<FolderRootIcon
+											<IdCardIcon
 												className="absolute top-2 left-2 text-input"
 												size={20}
 											/>
