@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { type PropsWithChildren, useEffect, useState } from "react";
 
 interface Props {
-	mode?: AuthenticationMode;
+	mode: AuthenticationMode;
 }
 
 export default function AuthenticationProviderComponent({
