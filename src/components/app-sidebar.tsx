@@ -142,7 +142,7 @@ const projectMenuItems = [
 	},
 	{
 		title: "Logs",
-		url: "/logs",
+		url: "/project-logs",
 		icon: LogsIcon,
 	},
 ];
