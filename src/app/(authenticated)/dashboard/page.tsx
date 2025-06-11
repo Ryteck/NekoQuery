@@ -61,7 +61,6 @@ export default function Page() {
 		if (projects?.data) setProjects(projects.data);
 	}
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		loadProjects();
 	}, []);

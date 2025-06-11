@@ -17,7 +17,6 @@ export default function AuthenticationProviderComponent({
 	const session = authClient.useSession();
 	const router = useRouter();
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (!session.isPending) {
 			const hasSession = session.data !== null;
@@ -32,5 +31,5 @@ export default function AuthenticationProviderComponent({
 		}
 	}, [session.isPending]);
 
-	return isLoading ? null : children;
+	return isLoading || session.isPending ? null : children;
 }

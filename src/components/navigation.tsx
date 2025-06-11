@@ -14,9 +14,7 @@ import { authClient } from "@/lib/auth-client";
 
 export default function NavigationComponent() {
 	const session = authClient.useSession();
-	const hasSession = session.data !== null;
-
-	if (!hasSession) return null;
+	if (session.isPending || !session.data) return null;
 
 	return (
 		<div className="flex items-center gap-2 mb-4">

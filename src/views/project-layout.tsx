@@ -14,7 +14,6 @@ export function ProjectLayoutView({
 }: PropsWithChildren<Props>) {
 	const projectStore = useProjectStore();
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		projectStore.setProjet(project);
 	}, [project]);

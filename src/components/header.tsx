@@ -11,9 +11,7 @@ export default function HeaderComponent() {
 	const router = useRouter();
 
 	const session = authClient.useSession();
-	const hasSession = session.data !== null;
-
-	if (hasSession) return null;
+	if (session.isPending || !!session.data) return null;
 
 	return (
 		<header className="flex gap-6 items-center">
