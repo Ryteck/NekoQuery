@@ -17,9 +17,17 @@ export default function HeaderComponent() {
 
 	return (
 		<header className="flex gap-6 items-center">
-			<LayoutDashboardIcon size={48} absoluteStrokeWidth />
+			<LayoutDashboardIcon
+				size={48}
+				absoluteStrokeWidth
+				className="min-w-12 min-h-12 hidden sm:block "
+			/>
 
-			<h2 className={`${gruppoFont.className} text-5xl`}>Neko Query</h2>
+			<h2
+				className={`${gruppoFont.className} hidden sm:block text-2xl md:text-5xl`}
+			>
+				Neko Query
+			</h2>
 
 			<div className="flex-1 flex gap-2 items-center justify-end">
 				<Button variant="link" asChild>
@@ -35,6 +43,7 @@ export default function HeaderComponent() {
 				</Button>
 
 				<Button
+					className="ml-auto sm:ml-0"
 					onClick={() => {
 						router.push("/sign-up");
 					}}

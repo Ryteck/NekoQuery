@@ -1,7 +1,8 @@
-import { AppSidebarComponent } from "@/components/app-sidebar";
 import "./globals.css";
 
+import { AppSidebarComponent } from "@/components/app-sidebar";
 import HeaderComponent from "@/components/header";
+import NavigationComponent from "@/components/navigation";
 import ThemeProviderComponent from "@/components/providers/theme";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
@@ -28,7 +29,11 @@ export default function Layout({ children }: PropsWithChildren) {
 						<div className="h-screen w-full flex flex-col p-6 gap-6 overflow-auto">
 							<HeaderComponent />
 
-							<main className="container flex-1 mx-auto">{children}</main>
+							<main className="container flex-1 mx-auto">
+								<NavigationComponent />
+
+								{children}
+							</main>
 
 							<footer className="mx-auto">
 								<p className="text-muted-foreground text-sm">
