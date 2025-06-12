@@ -1,7 +1,5 @@
 "use client";
 
-import { deleteProjectByIdAction } from "@/actions/deleteProjectById";
-import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
 import {
 	AlertDialog,
@@ -33,7 +31,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import type { ProjectData } from "@/db/schema/project";
+import { authClient } from "@/lib/auth-client";
 import {
 	ArrowRightIcon,
 	EllipsisIcon,
@@ -45,25 +43,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Page() {
-	const [projects, setProjects] = useState<ProjectData[]>([]);
+	const organizations = authClient.useListOrganizations();
 	const [filter, setFilter] = useState("");
 
-	const [selectedProjectIdForDelete, setSelectedProjectIdForDelete] =
+	const [selectedOrganizationIdForDelete, setSelectedOrganizationIdForDelete] =
 		useState("");
 
 	const router = useRouter();
-
-	async function loadProjects() {
-		const projects = await listProjectsByUserIdAction();
-		if (projects?.data) setProjects(projects.data);
-	}
-
-	useEffect(() => {
-		loadProjects();
-	}, []);
 
 	return (
 		<div className="flex flex-col gap-8">
@@ -86,15 +75,15 @@ export default function Page() {
 				<Button
 					size="icon"
 					onClick={() => {
-						router.push("/projects");
+						router.push("/organizations");
 					}}
 				>
 					<PlusIcon />
 				</Button>
 			</div>
 			<div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-6">
-				{projects
-					.filter((arg) =>
+				{organizations.data
+					?.filter((arg) =>
 						arg.name.toLowerCase().includes(filter.toLowerCase()),
 					)
 					.map((arg) => (
@@ -103,7 +92,7 @@ export default function Page() {
 								<CardTitle className="truncate">{arg.name}</CardTitle>
 
 								<CardDescription className="truncate">
-									projects/{arg.id}
+									organizations/{arg.id}
 								</CardDescription>
 
 								<CardAction className="pl-4 flex gap-2 items-center">
@@ -119,11 +108,13 @@ export default function Page() {
 										</DropdownMenuTrigger>
 
 										<DropdownMenuContent>
-											<DropdownMenuLabel>Project options</DropdownMenuLabel>
+											<DropdownMenuLabel>
+												Organization options
+											</DropdownMenuLabel>
 
 											<DropdownMenuItem
 												onClick={() => {
-													router.push(`/projects/${arg.id}`);
+													router.push(`/organizations/${arg.id}`);
 												}}
 											>
 												Access
@@ -135,7 +126,7 @@ export default function Page() {
 											<DropdownMenuItem
 												variant="destructive"
 												onClick={() => {
-													setSelectedProjectIdForDelete(arg.id);
+													setSelectedOrganizationIdForDelete(arg.id);
 												}}
 											>
 												Delete
@@ -147,20 +138,20 @@ export default function Page() {
 									</DropdownMenu>
 
 									<AlertDialog
-										open={selectedProjectIdForDelete !== ""}
+										open={selectedOrganizationIdForDelete !== ""}
 										onOpenChange={(open) => {
 											if (!open) {
-												setSelectedProjectIdForDelete("");
+												setSelectedOrganizationIdForDelete("");
 											}
 										}}
 									>
 										<AlertDialogContent>
 											<AlertDialogHeader>
 												<AlertDialogTitle>
-													Are you sure you want to delete this project?
+													Are you sure you want to delete this organization?
 												</AlertDialogTitle>
 												<AlertDialogDescription>
-													This action is irreversible. The project will be
+													This action is irreversible. The organization will be
 													permanently removed and all associated data will be
 													lost.
 												</AlertDialogDescription>
@@ -169,11 +160,9 @@ export default function Page() {
 												<AlertDialogCancel>Cancel</AlertDialogCancel>
 												<AlertDialogAction
 													onClick={async () => {
-														await deleteProjectByIdAction(
-															selectedProjectIdForDelete,
-														);
-
-														await loadProjects();
+														authClient.organization.delete({
+															organizationId: selectedOrganizationIdForDelete,
+														});
 													}}
 												>
 													Continue

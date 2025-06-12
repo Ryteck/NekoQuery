@@ -80,7 +80,7 @@ export default function Page() {
 				{/* Sign Up Form */}
 				<Form {...form}>
 					<form
-						className="mx-auto flex flex-col gap-6 min-w-[480px]"
+						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"
 						onSubmit={form.handleSubmit(handleCreateOrganization)}
 					>
 						{/* Project Name Field */}
@@ -94,7 +94,7 @@ export default function Page() {
 									<FormControl>
 										<div className="relative">
 											<Building
-												className="absolute top-2 left-2 text-input"
+												className="absolute top-2 left-2 text-foreground/50"
 												size={20}
 											/>
 

@@ -111,7 +111,7 @@ export default function Page() {
 									<FormControl>
 										<div className="relative">
 											<User2Icon
-												className="absolute top-2 left-2 text-input"
+												className="absolute top-2 left-2 text-foreground/50"
 												size={20}
 											/>
 
@@ -140,7 +140,7 @@ export default function Page() {
 									<FormControl>
 										<div className="relative">
 											<MailIcon
-												className="absolute top-2 left-2 text-input"
+												className="absolute top-2 left-2 text-foreground/50"
 												size={20}
 											/>
 
@@ -170,7 +170,7 @@ export default function Page() {
 									<FormControl>
 										<div className="relative">
 											<LockIcon
-												className="absolute top-2 left-2 text-input"
+												className="absolute top-2 left-2 text-foreground/50"
 												size={20}
 											/>
 
@@ -214,7 +214,7 @@ export default function Page() {
 									<FormControl>
 										<div className="relative">
 											<LockIcon
-												className="absolute top-2 left-2 text-input"
+												className="absolute top-2 left-2 text-foreground/50"
 												size={20}
 											/>
 

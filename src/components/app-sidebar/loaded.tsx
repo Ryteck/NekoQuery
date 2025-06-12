@@ -3,6 +3,7 @@
 import {
 	BadgeCheckIcon,
 	BellIcon,
+	Building2Icon,
 	ChartColumnIcon,
 	ChevronsLeftRightEllipsisIcon,
 	ChevronsUpDownIcon,
@@ -26,6 +27,16 @@ import {
 } from "lucide-react";
 
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuShortcut,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
@@ -39,21 +50,12 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import type { BetterAuthSession } from "@/lib/auth-client";
 import { useProjectStore } from "@/stores/project";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ThemeModeToggleComponent } from "./theme-mode-toggle";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuShortcut,
-	DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import UserAvatarComponent from "./user-avatar";
+import { ThemeModeToggleComponent } from "../theme-mode-toggle";
+import UserAvatarComponent from "../user-avatar";
 
 // Menu items.
 const menuItems = [
@@ -71,6 +73,11 @@ const menuItems = [
 		title: "Dashboard",
 		url: "/dashboard",
 		icon: LayoutDashboardIcon,
+	},
+	{
+		title: "Organizations",
+		url: "/organizations/list",
+		icon: Building2Icon,
 	},
 ];
 
@@ -128,7 +135,11 @@ const projectMenuItems = [
 	},
 ];
 
-export function AppSidebarComponent() {
+interface Props {
+	session: BetterAuthSession;
+}
+
+export function AppSidebarLoadedComponent({ session }: Props) {
 	const projectStore = useProjectStore();
 	const selectedProject = projectStore.project;
 
@@ -137,12 +148,8 @@ export function AppSidebarComponent() {
 
 	const { isMobile } = useSidebar();
 
-	const session = authClient.useSession();
-
 	const organizations = authClient.useListOrganizations();
 	const activeOrganization = authClient.useActiveOrganization();
-
-	if (session.isPending || !session.data) return null;
 
 	return (
 		<Sidebar variant="floating" collapsible="icon">
@@ -305,10 +312,10 @@ export function AppSidebarComponent() {
 
 									<div className="grid flex-1 text-left text-sm leading-tight">
 										<span className="truncate font-medium">
-											{session.data.user.name}
+											{session.user.name}
 										</span>
 										<span className="truncate text-xs">
-											{session.data.user.email}
+											{session.user.email}
 										</span>
 									</div>
 									<ChevronsUpDownIcon className="ml-auto size-4" />
@@ -326,10 +333,10 @@ export function AppSidebarComponent() {
 
 										<div className="grid flex-1 text-left text-sm leading-tight">
 											<span className="truncate font-medium">
-												{session.data.user.name}
+												{session.user.name}
 											</span>
 											<span className="truncate text-xs">
-												{session.data.user.email}
+												{session.user.email}
 											</span>
 										</div>
 									</div>
