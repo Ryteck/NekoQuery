@@ -1,5 +1,3 @@
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,18 +18,31 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import UserAvatarComponent from "@/components/user-avatar";
-import { useProjectStore } from "@/stores/project";
+import { auth } from "@/lib/auth";
 import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
+import { headers } from "next/headers";
 
-export default function Page() {
-	const projectStore = useProjectStore();
-	const project = projectStore.project;
+interface Params {
+	slug: string;
+}
+
+interface Props {
+	params: Promise<Params>;
+}
+
+export default async function Page(props: Props) {
+	const params = await props.params;
+
+	const organization = await auth.api.getFullOrganization({
+		headers: await headers(),
+		query: { organizationSlug: params.slug },
+	});
 
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Project</CardTitle>
-				<CardDescription>{project?.name}</CardDescription>
+				<CardTitle>Organization</CardTitle>
+				<CardDescription>{organization?.name}</CardDescription>
 				<CardAction>
 					<Button size="icon" variant="outline" type="button">
 						<EllipsisIcon />
@@ -53,14 +64,14 @@ export default function Page() {
 					</TableHeader>
 
 					<TableBody>
-						{project?.members.map((arg) => (
+						{organization?.members.map((arg) => (
 							<TableRow key={arg.id}>
 								<TableCell>
 									<UserAvatarComponent />
 								</TableCell>
 
-								<TableCell>{arg.userName}</TableCell>
-								<TableCell>{arg.userEmail}</TableCell>
+								<TableCell>{arg.user.name}</TableCell>
+								<TableCell>{arg.user.email}</TableCell>
 
 								<TableCell className="text-center">
 									<Badge>{arg.role}</Badge>

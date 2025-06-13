@@ -92,7 +92,7 @@ export default function Page() {
 								<CardTitle className="truncate">{arg.name}</CardTitle>
 
 								<CardDescription className="truncate">
-									organizations/{arg.id}
+									organizations/{arg.slug}
 								</CardDescription>
 
 								<CardAction className="pl-4 flex gap-2 items-center">
@@ -114,7 +114,7 @@ export default function Page() {
 
 											<DropdownMenuItem
 												onClick={() => {
-													router.push(`/organizations/${arg.id}`);
+													router.push(`/organizations/${arg.slug}`);
 												}}
 											>
 												Access

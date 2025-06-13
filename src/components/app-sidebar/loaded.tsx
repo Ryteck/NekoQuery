@@ -55,6 +55,7 @@ import { useProjectStore } from "@/stores/project";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeModeToggleComponent } from "../theme-mode-toggle";
+import { ScrollArea } from "../ui/scroll-area";
 import UserAvatarComponent from "../user-avatar";
 
 // Menu items.
@@ -249,54 +250,56 @@ export function AppSidebarLoadedComponent({ session }: Props) {
 			</SidebarHeader>
 
 			<SidebarContent>
-				<SidebarGroup>
-					<SidebarGroupLabel>Application</SidebarGroupLabel>
-					<SidebarGroupContent>
-						<SidebarMenu>
-							{menuItems.map((item) => (
-								<SidebarMenuItem key={item.title}>
-									<SidebarMenuButton
-										disabled={pathName === item.url}
-										onClick={() => {
-											router.push(item.url);
-										}}
-									>
-										<item.icon />
-										<span>{item.title}</span>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							))}
-						</SidebarMenu>
-					</SidebarGroupContent>
-				</SidebarGroup>
-
-				{selectedProject && (
+				<ScrollArea className="h-full">
 					<SidebarGroup>
-						<SidebarGroupLabel>Project</SidebarGroupLabel>
+						<SidebarGroupLabel>Application</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
-								{projectMenuItems.map((item) => {
-									const baseUrl = `/projects/${selectedProject.id}`;
-									const destinyPath = `${baseUrl}${item.url}`;
-
-									return (
-										<SidebarMenuItem key={item.title}>
-											<SidebarMenuButton
-												disabled={pathName === destinyPath}
-												onClick={() => {
-													router.push(destinyPath);
-												}}
-											>
-												<item.icon />
-												<span>{item.title}</span>
-											</SidebarMenuButton>
-										</SidebarMenuItem>
-									);
-								})}
+								{menuItems.map((item) => (
+									<SidebarMenuItem key={item.title}>
+										<SidebarMenuButton
+											disabled={pathName === item.url}
+											onClick={() => {
+												router.push(item.url);
+											}}
+										>
+											<item.icon />
+											<span>{item.title}</span>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								))}
 							</SidebarMenu>
 						</SidebarGroupContent>
 					</SidebarGroup>
-				)}
+
+					{selectedProject && (
+						<SidebarGroup>
+							<SidebarGroupLabel>Project</SidebarGroupLabel>
+							<SidebarGroupContent>
+								<SidebarMenu>
+									{projectMenuItems.map((item) => {
+										const baseUrl = `/projects/${selectedProject.id}`;
+										const destinyPath = `${baseUrl}${item.url}`;
+
+										return (
+											<SidebarMenuItem key={item.title}>
+												<SidebarMenuButton
+													disabled={pathName === destinyPath}
+													onClick={() => {
+														router.push(destinyPath);
+													}}
+												>
+													<item.icon />
+													<span>{item.title}</span>
+												</SidebarMenuButton>
+											</SidebarMenuItem>
+										);
+									})}
+								</SidebarMenu>
+							</SidebarGroupContent>
+						</SidebarGroup>
+					)}
+				</ScrollArea>
 			</SidebarContent>
 
 			<SidebarFooter>

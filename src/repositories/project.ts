@@ -29,10 +29,11 @@ export async function showProjectById(
 
 	const selectedMembers = await db
 		.select({
+			id: participant.id,
+			role: participant.role,
 			userId: user.id,
 			userName: user.name,
-			participantId: participant.id,
-			participantRole: participant.role,
+			userEmail: user.email,
 		})
 		.from(participant)
 		.innerJoin(user, eq(participant.userId, user.id))
