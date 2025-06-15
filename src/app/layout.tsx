@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: PropsWithChildren) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className="h-screen dark:bg-gradient-to-tr dark:from-neutral-950 dark:via-purple-950 dark:to-neutral-950">
+			<body className="h-dvh dark:bg-gradient-to-tr dark:from-neutral-950 dark:via-purple-950 dark:to-neutral-950">
 				<ThemeProviderComponent
 					attribute="class"
 					defaultTheme="system"
@@ -26,7 +26,7 @@ export default function Layout({ children }: PropsWithChildren) {
 					<SidebarProvider>
 						<AppSidebarComponent />
 
-						<div className="h-screen w-full flex flex-col p-6 gap-6 overflow-auto">
+						<div className="h-dvh w-full flex flex-col p-6 gap-6 overflow-auto">
 							<HeaderComponent />
 
 							<main className="container flex-1 mx-auto">

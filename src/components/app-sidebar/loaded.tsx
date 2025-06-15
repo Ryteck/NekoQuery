@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	AppWindowMacIcon,
 	BadgeCheckIcon,
 	BellIcon,
 	Building2Icon,
@@ -79,6 +80,11 @@ const menuItems = [
 		title: "Organizations",
 		url: "/organizations/list",
 		icon: Building2Icon,
+	},
+	{
+		title: "APIs",
+		url: "/apis/list",
+		icon: AppWindowMacIcon,
 	},
 ];
 

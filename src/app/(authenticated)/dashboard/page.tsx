@@ -3,6 +3,7 @@
 import { deleteProjectByIdAction } from "@/actions/deleteProjectById";
 import { listProjectsByUserIdAction } from "@/actions/listProjectsByUserId";
 import GithubMarkWhite from "@/assets/github-mark-white.svg";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -40,6 +41,7 @@ import {
 	GitMergeIcon,
 	PlusIcon,
 	SearchIcon,
+	SearchXIcon,
 	TrashIcon,
 	TrendingUpIcon,
 } from "lucide-react";
@@ -50,6 +52,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
 	const [projects, setProjects] = useState<ProjectData[]>([]);
 	const [filter, setFilter] = useState("");
+	const [isLoading, setIsLoading] = useState(true);
 
 	const [selectedProjectIdForDelete, setSelectedProjectIdForDelete] =
 		useState("");
@@ -62,8 +65,12 @@ export default function Page() {
 	}
 
 	useEffect(() => {
-		loadProjects();
+		loadProjects().finally(() => setIsLoading(false));
 	}, []);
+
+	const filteredProjects = projects.filter((arg) =>
+		arg.name.toLowerCase().includes(filter.toLowerCase()),
+	);
 
 	return (
 		<div className="flex flex-col gap-8">
@@ -92,119 +99,127 @@ export default function Page() {
 					<PlusIcon />
 				</Button>
 			</div>
+
+			{filteredProjects.length === 0 && !isLoading && (
+				<Alert>
+					<SearchXIcon />
+					<AlertTitle>No projects available</AlertTitle>
+					<AlertDescription>
+						No projects were found. Please check if any projects have been
+						created or try adjusting the applied filters.
+					</AlertDescription>
+				</Alert>
+			)}
+
 			<div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-6">
-				{projects
-					.filter((arg) =>
-						arg.name.toLowerCase().includes(filter.toLowerCase()),
-					)
-					.map((arg) => (
-						<Card key={arg.id}>
-							<CardHeader>
-								<CardTitle className="truncate">{arg.name}</CardTitle>
+				{filteredProjects.map((arg) => (
+					<Card key={arg.id}>
+						<CardHeader>
+							<CardTitle className="truncate">{arg.name}</CardTitle>
 
-								<CardDescription className="truncate">
-									projects/{arg.id}
-								</CardDescription>
+							<CardDescription className="truncate">
+								projects/{arg.id}
+							</CardDescription>
 
-								<CardAction className="pl-4 flex gap-2 items-center">
-									<div className="w-8 h-8 border rounded-full p-2 flex items-center justify-center">
-										<TrendingUpIcon />
-									</div>
+							<CardAction className="pl-4 flex gap-2 items-center">
+								<div className="w-8 h-8 border rounded-full p-2 flex items-center justify-center">
+									<TrendingUpIcon />
+								</div>
 
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<Button size="icon" variant="outline" type="button">
-												<EllipsisIcon />
-											</Button>
-										</DropdownMenuTrigger>
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<Button size="icon" variant="outline" type="button">
+											<EllipsisIcon />
+										</Button>
+									</DropdownMenuTrigger>
 
-										<DropdownMenuContent>
-											<DropdownMenuLabel>Project options</DropdownMenuLabel>
+									<DropdownMenuContent>
+										<DropdownMenuLabel>Project options</DropdownMenuLabel>
 
-											<DropdownMenuItem
-												onClick={() => {
-													router.push(`/projects/${arg.id}`);
+										<DropdownMenuItem
+											onClick={() => {
+												router.push(`/projects/${arg.id}`);
+											}}
+										>
+											Access
+											<DropdownMenuShortcut>
+												<ArrowRightIcon />
+											</DropdownMenuShortcut>
+										</DropdownMenuItem>
+
+										<DropdownMenuItem
+											variant="destructive"
+											onClick={() => {
+												setSelectedProjectIdForDelete(arg.id);
+											}}
+										>
+											Delete
+											<DropdownMenuShortcut>
+												<TrashIcon />
+											</DropdownMenuShortcut>
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+
+								<AlertDialog
+									open={selectedProjectIdForDelete !== ""}
+									onOpenChange={(open) => {
+										if (!open) {
+											setSelectedProjectIdForDelete("");
+										}
+									}}
+								>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>
+												Are you sure you want to delete this project?
+											</AlertDialogTitle>
+											<AlertDialogDescription>
+												This action is irreversible. The project will be
+												permanently removed and all associated data will be
+												lost.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction
+												onClick={async () => {
+													await deleteProjectByIdAction(
+														selectedProjectIdForDelete,
+													);
+
+													await loadProjects();
 												}}
 											>
-												Access
-												<DropdownMenuShortcut>
-													<ArrowRightIcon />
-												</DropdownMenuShortcut>
-											</DropdownMenuItem>
+												Continue
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
+							</CardAction>
+						</CardHeader>
+						<CardContent>
+							<Badge className="py-1.5 px-3">
+								<Image
+									alt="GitHub Logo"
+									width={20}
+									height={20}
+									src={GithubMarkWhite}
+								/>
+								Ryteck/NekoQuery
+							</Badge>
+						</CardContent>
+						<CardFooter className="flex flex-col text-muted-foreground text-sm">
+							<p className="w-full">qwerty</p>
 
-											<DropdownMenuItem
-												variant="destructive"
-												onClick={() => {
-													setSelectedProjectIdForDelete(arg.id);
-												}}
-											>
-												Delete
-												<DropdownMenuShortcut>
-													<TrashIcon />
-												</DropdownMenuShortcut>
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
-
-									<AlertDialog
-										open={selectedProjectIdForDelete !== ""}
-										onOpenChange={(open) => {
-											if (!open) {
-												setSelectedProjectIdForDelete("");
-											}
-										}}
-									>
-										<AlertDialogContent>
-											<AlertDialogHeader>
-												<AlertDialogTitle>
-													Are you sure you want to delete this project?
-												</AlertDialogTitle>
-												<AlertDialogDescription>
-													This action is irreversible. The project will be
-													permanently removed and all associated data will be
-													lost.
-												</AlertDialogDescription>
-											</AlertDialogHeader>
-											<AlertDialogFooter>
-												<AlertDialogCancel>Cancel</AlertDialogCancel>
-												<AlertDialogAction
-													onClick={async () => {
-														await deleteProjectByIdAction(
-															selectedProjectIdForDelete,
-														);
-
-														await loadProjects();
-													}}
-												>
-													Continue
-												</AlertDialogAction>
-											</AlertDialogFooter>
-										</AlertDialogContent>
-									</AlertDialog>
-								</CardAction>
-							</CardHeader>
-							<CardContent>
-								<Badge className="py-1.5 px-3">
-									<Image
-										alt="GitHub Logo"
-										width={20}
-										height={20}
-										src={GithubMarkWhite}
-									/>
-									Ryteck/NekoQuery
-								</Badge>
-							</CardContent>
-							<CardFooter className="flex flex-col text-muted-foreground text-sm">
-								<p className="w-full">qwerty</p>
-
-								<p className="w-full flex gap-1 items-center">
-									xh ago on
-									<GitMergeIcon size={16} />
-									main
-								</p>
-							</CardFooter>
-						</Card>
-					))}
+							<p className="w-full flex gap-1 items-center">
+								xh ago on
+								<GitMergeIcon size={16} />
+								main
+							</p>
+						</CardFooter>
+					</Card>
+				))}
 			</div>
 		</div>
 	);

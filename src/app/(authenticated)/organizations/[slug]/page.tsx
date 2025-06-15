@@ -9,6 +9,16 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import {
 	Table,
 	TableBody,
 	TableCaption,
@@ -78,9 +88,39 @@ export default async function Page(props: Props) {
 								</TableCell>
 
 								<TableCell className="text-right">
-									<Button size="icon" variant="outline">
-										<ExternalLinkIcon />
-									</Button>
+									<Dialog>
+										<DialogTrigger asChild>
+											<Button size="icon" variant="outline">
+												<ExternalLinkIcon />
+											</Button>
+										</DialogTrigger>
+
+										<DialogContent>
+											<DialogHeader>
+												<DialogTitle>Member Details</DialogTitle>
+												<DialogDescription>
+													View and edit information about this organization
+													member.
+												</DialogDescription>
+											</DialogHeader>
+
+											<div className="flex items-center gap-4 px-4 py-2 w-fit border-2 rounded-2xl">
+												<UserAvatarComponent />
+												{arg.user.name}
+												<Badge>{arg.role}</Badge>
+											</div>
+
+											<DialogFooter>
+												<DialogClose asChild>
+													<Button type="button" variant="secondary">
+														Close
+													</Button>
+												</DialogClose>
+
+												<Button type="submit">Confirm</Button>
+											</DialogFooter>
+										</DialogContent>
+									</Dialog>
 								</TableCell>
 							</TableRow>
 						))}
