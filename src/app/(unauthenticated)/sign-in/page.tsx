@@ -30,6 +30,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -65,7 +66,9 @@ export default function Page() {
 			rememberMe: data.rememberMe,
 			fetchOptions: {
 				onSuccess: () => router.push("/dashboard"),
-				onError: (ctx) => alert(ctx.error.message),
+				onError: (ctx) => {
+					toast.error(ctx.error.message);
+				},
 			},
 		});
 	}

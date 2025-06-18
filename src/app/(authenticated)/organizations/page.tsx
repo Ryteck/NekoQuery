@@ -24,6 +24,7 @@ import { Building, LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import slug from "slug";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -56,7 +57,7 @@ export default function Page() {
 		});
 
 		if (organization.error) {
-			alert(organization.error.message);
+			toast.error(organization.error.message);
 			return;
 		}
 
@@ -68,7 +69,7 @@ export default function Page() {
 	}
 
 	return (
-		<Card className="w-fit mx-auto">
+		<Card className="mx-auto w-full lg:max-w-[480px]">
 			<CardHeader>
 				<CardTitle>Create Organization</CardTitle>
 				<CardDescription>
@@ -80,7 +81,7 @@ export default function Page() {
 				{/* Sign Up Form */}
 				<Form {...form}>
 					<form
-						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"
+						className="flex flex-col gap-6"
 						onSubmit={form.handleSubmit(handleCreateOrganization)}
 					>
 						{/* Project Name Field */}

@@ -1,5 +1,6 @@
 "use client";
 
+import { createApiAction } from "@/actions/createApi";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -31,6 +32,7 @@ import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppWindowMacIcon, GlobeIcon, LoaderIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -39,7 +41,7 @@ const formSchema = z.object({
 		message: "Name is required.",
 	}),
 
-	baseURL: z.string().url().nonempty().nullable(),
+	baseUrl: z.string().url().nonempty().nullable(),
 
 	organizationId: z
 		.string()
@@ -56,19 +58,23 @@ export default function Page() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
-			baseURL: "",
+			baseUrl: "",
 			organizationId: "",
 		},
 	});
 
+	const router = useRouter();
+
 	async function handleCreateApi(data: FormSchema) {
-		console.log(data);
+		const api = await createApiAction(data);
+
+		if (api?.data) router.push(`/apis/${api.data.id}`);
 	}
 
 	const organizations = authClient.useListOrganizations();
 
 	return (
-		<Card className="w-fit mx-auto">
+		<Card className="mx-auto w-full lg:max-w-[480px]">
 			<CardHeader>
 				<CardTitle>Create API</CardTitle>
 				<CardDescription>
@@ -80,7 +86,7 @@ export default function Page() {
 				{/* Sign Up Form */}
 				<Form {...form}>
 					<form
-						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"
+						className="flex flex-col gap-6"
 						onSubmit={form.handleSubmit(handleCreateApi)}
 					>
 						{/* API Name Field */}
@@ -114,10 +120,10 @@ export default function Page() {
 							)}
 						/>
 
-						{/* API BaseURL Field */}
+						{/* API baseUrl Field */}
 						<FormField
 							control={form.control}
-							name="baseURL"
+							name="baseUrl"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>API Base URL</FormLabel>
@@ -157,10 +163,10 @@ export default function Page() {
 							</div>
 							<FormControl>
 								<Switch
-									checked={form.watch().baseURL !== null}
+									checked={form.watch().baseUrl !== null}
 									onCheckedChange={(arg) => {
-										form.setValue("baseURL", arg ? "" : null);
-										form.clearErrors("baseURL");
+										form.setValue("baseUrl", arg ? "" : null);
+										form.clearErrors("baseUrl");
 									}}
 								/>
 							</FormControl>
@@ -190,18 +196,20 @@ export default function Page() {
 												No organization linked (personal use)
 											</SelectItem>
 
-											<SelectGroup>
-												<SelectLabel>Organizations</SelectLabel>
+											{(organizations.data?.length ?? 0) > 0 && (
+												<SelectGroup>
+													<SelectLabel>Organizations</SelectLabel>
 
-												{/* List of available organizations */}
-												{organizations.data
-													?.sort((a, b) => a.name.localeCompare(b.name))
-													.map((arg) => (
-														<SelectItem key={arg.id} value={arg.id}>
-															{arg.name}
-														</SelectItem>
-													))}
-											</SelectGroup>
+													{/* List of available organizations */}
+													{organizations.data
+														?.sort((a, b) => a.name.localeCompare(b.name))
+														.map((arg) => (
+															<SelectItem key={arg.id} value={arg.id}>
+																{arg.name}
+															</SelectItem>
+														))}
+												</SelectGroup>
+											)}
 										</SelectContent>
 									</Select>
 

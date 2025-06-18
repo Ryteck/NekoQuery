@@ -146,7 +146,7 @@ interface Props {
 	session: BetterAuthSession;
 }
 
-export function AppSidebarLoadedComponent({ session }: Props) {
+export function SidebarLoadedComponent({ session }: Props) {
 	const projectStore = useProjectStore();
 	const selectedProject = projectStore.project;
 

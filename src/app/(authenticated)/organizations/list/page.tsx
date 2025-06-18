@@ -101,112 +101,116 @@ export default function Page() {
 			)}
 
 			<div className="grid grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] gap-6">
-				{filteredOrganizations.map((arg) => (
-					<Card key={arg.id}>
-						<CardHeader>
-							<CardTitle className="truncate">{arg.name}</CardTitle>
+				{filteredOrganizations
+					.sort((a, b) => a.name.localeCompare(b.name))
+					.map((arg) => (
+						<Card key={arg.id}>
+							<CardHeader>
+								<CardTitle className="truncate">{arg.name}</CardTitle>
 
-							<CardDescription className="truncate">
-								organizations/{arg.slug}
-							</CardDescription>
+								<CardDescription className="truncate">
+									organizations/{arg.slug}
+								</CardDescription>
 
-							<CardAction className="pl-4 flex gap-2 items-center">
-								<div className="w-8 h-8 border rounded-full p-2 flex items-center justify-center">
-									<TrendingUpIcon />
-								</div>
+								<CardAction className="pl-4 flex gap-2 items-center">
+									<div className="w-8 h-8 border rounded-full p-2 flex items-center justify-center">
+										<TrendingUpIcon />
+									</div>
 
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button size="icon" variant="outline" type="button">
-											<EllipsisIcon />
-										</Button>
-									</DropdownMenuTrigger>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button size="icon" variant="outline" type="button">
+												<EllipsisIcon />
+											</Button>
+										</DropdownMenuTrigger>
 
-									<DropdownMenuContent>
-										<DropdownMenuLabel>Organization options</DropdownMenuLabel>
+										<DropdownMenuContent>
+											<DropdownMenuLabel>
+												Organization options
+											</DropdownMenuLabel>
 
-										<DropdownMenuItem
-											onClick={() => {
-												router.push(`/organizations/${arg.slug}`);
-											}}
-										>
-											Access
-											<DropdownMenuShortcut>
-												<ArrowRightIcon />
-											</DropdownMenuShortcut>
-										</DropdownMenuItem>
-
-										<DropdownMenuItem
-											variant="destructive"
-											onClick={() => {
-												setSelectedOrganizationIdForDelete(arg.id);
-											}}
-										>
-											Delete
-											<DropdownMenuShortcut>
-												<TrashIcon />
-											</DropdownMenuShortcut>
-										</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-
-								<AlertDialog
-									open={selectedOrganizationIdForDelete !== ""}
-									onOpenChange={(open) => {
-										if (!open) {
-											setSelectedOrganizationIdForDelete("");
-										}
-									}}
-								>
-									<AlertDialogContent>
-										<AlertDialogHeader>
-											<AlertDialogTitle>
-												Are you sure you want to delete this organization?
-											</AlertDialogTitle>
-											<AlertDialogDescription>
-												This action is irreversible. The organization will be
-												permanently removed and all associated data will be
-												lost.
-											</AlertDialogDescription>
-										</AlertDialogHeader>
-										<AlertDialogFooter>
-											<AlertDialogCancel>Cancel</AlertDialogCancel>
-											<AlertDialogAction
-												onClick={async () => {
-													authClient.organization.delete({
-														organizationId: selectedOrganizationIdForDelete,
-													});
+											<DropdownMenuItem
+												onClick={() => {
+													router.push(`/organizations/${arg.slug}`);
 												}}
 											>
-												Continue
-											</AlertDialogAction>
-										</AlertDialogFooter>
-									</AlertDialogContent>
-								</AlertDialog>
-							</CardAction>
-						</CardHeader>
-						<CardContent>
-							<Badge className="py-1.5 px-3">
-								<Image
-									alt="GitHub Logo"
-									width={20}
-									height={20}
-									src={GithubMarkWhite}
-								/>
-								Ryteck/NekoQuery
-							</Badge>
-						</CardContent>
-						<CardFooter className="flex flex-col text-muted-foreground text-sm">
-							<p className="w-full">qwerty</p>
+												Access
+												<DropdownMenuShortcut>
+													<ArrowRightIcon />
+												</DropdownMenuShortcut>
+											</DropdownMenuItem>
 
-							<p className="w-full flex gap-1 items-center">
-								xh ago on
-								<GitMergeIcon size={16} />
-								main
-							</p>
-						</CardFooter>
-					</Card>
-				))}
+											<DropdownMenuItem
+												variant="destructive"
+												onClick={() => {
+													setSelectedOrganizationIdForDelete(arg.id);
+												}}
+											>
+												Delete
+												<DropdownMenuShortcut>
+													<TrashIcon />
+												</DropdownMenuShortcut>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+
+									<AlertDialog
+										open={selectedOrganizationIdForDelete !== ""}
+										onOpenChange={(open) => {
+											if (!open) {
+												setSelectedOrganizationIdForDelete("");
+											}
+										}}
+									>
+										<AlertDialogContent>
+											<AlertDialogHeader>
+												<AlertDialogTitle>
+													Are you sure you want to delete this organization?
+												</AlertDialogTitle>
+												<AlertDialogDescription>
+													This action is irreversible. The organization will be
+													permanently removed and all associated data will be
+													lost.
+												</AlertDialogDescription>
+											</AlertDialogHeader>
+											<AlertDialogFooter>
+												<AlertDialogCancel>Cancel</AlertDialogCancel>
+												<AlertDialogAction
+													onClick={async () => {
+														authClient.organization.delete({
+															organizationId: selectedOrganizationIdForDelete,
+														});
+													}}
+												>
+													Continue
+												</AlertDialogAction>
+											</AlertDialogFooter>
+										</AlertDialogContent>
+									</AlertDialog>
+								</CardAction>
+							</CardHeader>
+							<CardContent>
+								<Badge className="py-1.5 px-3">
+									<Image
+										alt="GitHub Logo"
+										width={20}
+										height={20}
+										src={GithubMarkWhite}
+									/>
+									Ryteck/NekoQuery
+								</Badge>
+							</CardContent>
+							<CardFooter className="flex flex-col text-muted-foreground text-sm">
+								<p className="w-full">qwerty</p>
+
+								<p className="w-full flex gap-1 items-center">
+									xh ago on
+									<GitMergeIcon size={16} />
+									main
+								</p>
+							</CardFooter>
+						</Card>
+					))}
 			</div>
 		</div>
 	);

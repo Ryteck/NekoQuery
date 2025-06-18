@@ -31,6 +31,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z
@@ -81,13 +82,15 @@ export default function Page() {
 			password: data.password,
 			fetchOptions: {
 				onSuccess: () => router.push("/dashboard"),
-				onError: (ctx) => alert(ctx.error.message),
+				onError: (ctx) => {
+					toast.error(ctx.error.message);
+				},
 			},
 		});
 	}
 
 	return (
-		<Card className="mx-a">
+		<Card>
 			<CardContent className="flex gap-8 w-full">
 				{/* Sign Up Form */}
 				<Form {...form}>

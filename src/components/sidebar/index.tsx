@@ -1,12 +1,12 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { AppSidebarLoadedComponent } from "./loaded";
+import { SidebarLoadedComponent } from "./loaded";
 
-export function AppSidebarComponent() {
+export function SidebarComponent() {
 	const session = authClient.useSession();
 
 	if (session.isPending || !session.data) return null;
 
-	return <AppSidebarLoadedComponent session={session.data} />;
+	return <SidebarLoadedComponent session={session.data} />;
 }

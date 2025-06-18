@@ -1,10 +1,11 @@
 import "./globals.css";
 
-import { AppSidebarComponent } from "@/components/app-sidebar";
 import HeaderComponent from "@/components/header";
 import NavigationComponent from "@/components/navigation";
 import ThemeProviderComponent from "@/components/providers/theme";
+import { SidebarComponent } from "@/components/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 
@@ -24,7 +25,7 @@ export default function Layout({ children }: PropsWithChildren) {
 					disableTransitionOnChange
 				>
 					<SidebarProvider>
-						<AppSidebarComponent />
+						<SidebarComponent />
 
 						<div className="h-dvh w-full flex flex-col p-6 gap-6 overflow-auto">
 							<HeaderComponent />
@@ -42,6 +43,8 @@ export default function Layout({ children }: PropsWithChildren) {
 							</footer>
 						</div>
 					</SidebarProvider>
+
+					<Toaster richColors />
 				</ThemeProviderComponent>
 			</body>
 		</html>
