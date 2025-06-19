@@ -87,7 +87,7 @@ export default function Page() {
 					/>
 				</div>
 
-				{/* Sign In Form */}
+				{/* Form */}
 				<Form {...form}>
 					<form
 						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"

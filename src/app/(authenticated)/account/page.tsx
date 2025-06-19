@@ -20,10 +20,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building, LoaderIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { LoaderIcon, User2Icon } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import slug from "slug";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -43,37 +42,31 @@ export default function Page() {
 		},
 	});
 
-	const router = useRouter();
+	const session = authClient.useSession();
 
-	async function handleCreateOrganization(data: FormSchema) {
-		const timestamp = Date.now();
-		const timestamp36 = timestamp.toString(36);
+	useEffect(() => {
+		if (!session.isPending && session.data?.user) {
+			form.setValue("name", session.data.user.name);
+		}
+	}, [session.isPending]);
 
-		const slugWithTimestamp = `${timestamp36}_${slug(data.name)}`;
+	async function handleUpdateUser(data: FormSchema) {
+		const updatedUser = await authClient.updateUser({ name: data.name });
 
-		const organization = await authClient.organization.create({
-			...data,
-			slug: slugWithTimestamp,
-		});
-
-		if (organization.error) {
-			toast.error(organization.error.message);
+		if (updatedUser.error) {
+			toast.error(updatedUser.error.message);
 			return;
 		}
 
-		await authClient.organization.setActive({
-			organizationId: organization.data.id,
-		});
-
-		router.push("/dashboard");
+		toast.success("User Updated!");
 	}
 
 	return (
 		<Card className="mx-auto w-full lg:max-w-[480px]">
 			<CardHeader>
-				<CardTitle>Create Organization</CardTitle>
+				<CardTitle>Edit Profile</CardTitle>
 				<CardDescription>
-					Fill out the details below to create a new organization.
+					Update your personal information below.
 				</CardDescription>
 			</CardHeader>
 
@@ -82,7 +75,7 @@ export default function Page() {
 				<Form {...form}>
 					<form
 						className="flex flex-col gap-6"
-						onSubmit={form.handleSubmit(handleCreateOrganization)}
+						onSubmit={form.handleSubmit(handleUpdateUser)}
 					>
 						{/* Project Name Field */}
 						<FormField
@@ -90,26 +83,25 @@ export default function Page() {
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Organization Name</FormLabel>
+									<FormLabel>Full Name</FormLabel>
 
 									<FormControl>
 										<div className="relative">
-											<Building
+											<User2Icon
 												className="absolute top-2 left-2 text-foreground/50"
 												size={20}
 											/>
 
 											<Input
 												className="pl-9"
-												placeholder="Neko Query"
+												placeholder="John Doe"
 												{...field}
 											/>
 										</div>
 									</FormControl>
 
-									<FormDescription>
-										Choose a name to identify your organization.
-									</FormDescription>
+									<FormDescription>Enter your full name.</FormDescription>
+
 									<FormMessage />
 								</FormItem>
 							)}
@@ -124,7 +116,7 @@ export default function Page() {
 							{form.formState.isSubmitting ? (
 								<LoaderIcon className="animate-spin" />
 							) : (
-								"Create project"
+								"Save profile"
 							)}
 						</Button>
 					</form>

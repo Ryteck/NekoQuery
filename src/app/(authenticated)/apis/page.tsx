@@ -83,7 +83,7 @@ export default function Page() {
 			</CardHeader>
 
 			<CardContent>
-				{/* Sign Up Form */}
+				{/* Form */}
 				<Form {...form}>
 					<form
 						className="flex flex-col gap-6"

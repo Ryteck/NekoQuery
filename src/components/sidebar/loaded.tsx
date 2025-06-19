@@ -142,6 +142,25 @@ const projectMenuItems = [
 	},
 ];
 
+// Menu items.
+const footerItems = [
+	{
+		title: "Account",
+		url: "/account",
+		icon: BadgeCheckIcon,
+	},
+	{
+		title: "Billing",
+		url: "/billing",
+		icon: CreditCardIcon,
+	},
+	{
+		title: "Notifications",
+		url: "/notifications",
+		icon: BellIcon,
+	},
+];
+
 interface Props {
 	session: BetterAuthSession;
 }
@@ -359,21 +378,20 @@ export function SidebarLoadedComponent({ session }: Props) {
 								</DropdownMenuGroup>
 								<DropdownMenuSeparator />
 								<DropdownMenuGroup>
-									<DropdownMenuItem>
-										<BadgeCheckIcon />
-										Account
-									</DropdownMenuItem>
+									{footerItems.map((item) => (
+										<DropdownMenuItem
+											key={item.title}
+											disabled={pathName === item.url}
+											onClick={() => {
+												router.push(item.url);
+											}}
+										>
+											<item.icon />
+											{item.title}
+										</DropdownMenuItem>
+									))}
 
 									<ThemeModeToggleComponent />
-
-									<DropdownMenuItem>
-										<CreditCardIcon />
-										Billing
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										<BellIcon />
-										Notifications
-									</DropdownMenuItem>
 								</DropdownMenuGroup>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem

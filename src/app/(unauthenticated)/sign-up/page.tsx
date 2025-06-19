@@ -92,7 +92,7 @@ export default function Page() {
 	return (
 		<Card>
 			<CardContent className="flex gap-8 w-full">
-				{/* Sign Up Form */}
+				{/* Form */}
 				<Form {...form}>
 					<form
 						className="mx-auto flex flex-col gap-6 w-full lg:max-w-[480px]"
@@ -127,6 +127,7 @@ export default function Page() {
 									</FormControl>
 
 									<FormDescription>Enter your full name.</FormDescription>
+
 									<FormMessage />
 								</FormItem>
 							)}
