@@ -57,7 +57,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeModeToggleComponent } from "../theme-mode-toggle";
 import { ScrollArea } from "../ui/scroll-area";
-import UserAvatarComponent from "../user-avatar";
+import { UserAvatarComponent } from "../user-avatar";
 
 // Menu items.
 const menuItems = [

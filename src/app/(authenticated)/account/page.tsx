@@ -1,6 +1,6 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
+import { EmailAccountFormComponent } from "@/components/forms/account/email";
+import { PasswordAccountFormComponent } from "@/components/forms/account/password";
+import { ProfileAccountFormComponent } from "@/components/forms/account/profile";
 import {
 	Card,
 	CardContent,
@@ -8,61 +8,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderIcon, User2Icon } from "lucide-react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-
-const formSchema = z.object({
-	name: z.string().nonempty({
-		message: "Name is required.",
-	}),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
 
 export default function Page() {
-	const form = useForm({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			name: "",
-		},
-	});
-
-	const session = authClient.useSession();
-
-	useEffect(() => {
-		if (!session.isPending && session.data?.user) {
-			form.setValue("name", session.data.user.name);
-		}
-	}, [session.isPending]);
-
-	async function handleUpdateUser(data: FormSchema) {
-		const updatedUser = await authClient.updateUser({ name: data.name });
-
-		if (updatedUser.error) {
-			toast.error(updatedUser.error.message);
-			return;
-		}
-
-		toast.success("User Updated!");
-	}
-
 	return (
-		<Card className="mx-auto w-full lg:max-w-[480px]">
+		<Card className="w-full">
 			<CardHeader>
 				<CardTitle>Edit Profile</CardTitle>
 				<CardDescription>
@@ -71,56 +20,16 @@ export default function Page() {
 			</CardHeader>
 
 			<CardContent>
-				{/* Form */}
-				<Form {...form}>
-					<form
-						className="flex flex-col gap-6"
-						onSubmit={form.handleSubmit(handleUpdateUser)}
-					>
-						{/* Project Name Field */}
-						<FormField
-							control={form.control}
-							name="name"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Full Name</FormLabel>
+				<div className="flex flex-col lg:flex-row gap-8">
+					<div className="w-full flex flex-col gap-8">
+						<ProfileAccountFormComponent />
+						<EmailAccountFormComponent />
+					</div>
 
-									<FormControl>
-										<div className="relative">
-											<User2Icon
-												className="absolute top-2 left-2 text-foreground/50"
-												size={20}
-											/>
-
-											<Input
-												className="pl-9"
-												placeholder="John Doe"
-												{...field}
-											/>
-										</div>
-									</FormControl>
-
-									<FormDescription>Enter your full name.</FormDescription>
-
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						{/* Submit Button */}
-						<Button
-							size="lg"
-							type="submit"
-							disabled={form.formState.isSubmitting}
-						>
-							{form.formState.isSubmitting ? (
-								<LoaderIcon className="animate-spin" />
-							) : (
-								"Save profile"
-							)}
-						</Button>
-					</form>
-				</Form>
+					<div className="w-full flex flex-col gap-8">
+						<PasswordAccountFormComponent />
+					</div>
+				</div>
 			</CardContent>
 		</Card>
 	);

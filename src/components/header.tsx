@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-export default function HeaderComponent() {
+export function HeaderComponent() {
 	const router = useRouter();
 
 	const session = authClient.useSession();

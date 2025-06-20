@@ -1,4 +1,4 @@
-import AuthenticationProviderComponent from "@/components/providers/authentication";
+import { AuthenticationProviderComponent } from "@/components/providers/authentication";
 import AuthenticationMode from "@/enums/AuthenticationState";
 import type { PropsWithChildren } from "react";
 

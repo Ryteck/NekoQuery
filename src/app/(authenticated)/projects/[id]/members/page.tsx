@@ -19,7 +19,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import UserAvatarComponent from "@/components/user-avatar";
+import { UserAvatarComponent } from "@/components/user-avatar";
 import { useProjectStore } from "@/stores/project";
 import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
 

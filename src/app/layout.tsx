@@ -1,8 +1,8 @@
 import "./globals.css";
 
-import HeaderComponent from "@/components/header";
-import NavigationComponent from "@/components/navigation";
-import ThemeProviderComponent from "@/components/providers/theme";
+import { HeaderComponent } from "@/components/header";
+import { NavigationComponent } from "@/components/navigation";
+import { ThemeProviderComponent } from "@/components/providers/theme";
 import { SidebarComponent } from "@/components/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";

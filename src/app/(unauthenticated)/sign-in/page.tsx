@@ -1,7 +1,7 @@
 "use client";
 
 import SignInTemplateAsset from "@/assets/sign-in-template.jpg";
-import SocialLoginComponent from "@/components/social-login";
+import { SocialLoginComponent } from "@/components/social-login";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";

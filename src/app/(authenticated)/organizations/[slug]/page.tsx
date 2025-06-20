@@ -27,7 +27,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import UserAvatarComponent from "@/components/user-avatar";
+import { UserAvatarComponent } from "@/components/user-avatar";
 import { auth } from "@/lib/auth";
 import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
 import { headers } from "next/headers";

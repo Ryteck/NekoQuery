@@ -9,7 +9,7 @@ interface Props {
 	mode: AuthenticationMode;
 }
 
-export default function AuthenticationProviderComponent({
+export function AuthenticationProviderComponent({
 	children,
 	mode,
 }: PropsWithChildren<Props>) {
