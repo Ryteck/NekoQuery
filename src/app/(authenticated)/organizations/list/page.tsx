@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { useNavigationStore } from "@/stores/navigation";
 import {
 	ArrowRightIcon,
 	EllipsisIcon,
@@ -45,7 +46,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
 	const organizations = authClient.useListOrganizations();
@@ -60,6 +61,13 @@ export default function Page() {
 		organizations.data?.filter((arg) =>
 			arg.name.toLowerCase().includes(filter.toLowerCase()),
 		) ?? [];
+
+	const navigationStore = useNavigationStore();
+
+	useEffect(() => {
+		navigationStore.setEnableOrganizations(false);
+		navigationStore.setCurrentPage("Organizations List");
+	}, []);
 
 	return (
 		<div className="flex flex-col gap-8">

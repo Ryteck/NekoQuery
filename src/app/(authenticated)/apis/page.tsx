@@ -30,9 +30,11 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { authClient } from "@/lib/auth-client";
+import { useNavigationStore } from "@/stores/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AppWindowMacIcon, GlobeIcon, LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -72,6 +74,12 @@ export default function Page() {
 	}
 
 	const organizations = authClient.useListOrganizations();
+
+	const navigationStore = useNavigationStore();
+
+	useEffect(() => {
+		navigationStore.setCurrentPage("Create New API");
+	}, []);
 
 	return (
 		<Card className="mx-auto w-full lg:max-w-[480px]">

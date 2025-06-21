@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { ApiData } from "@/db/schema/api";
+import { useNavigationStore } from "@/stores/navigation";
 import {
 	ArrowRightIcon,
 	EllipsisIcon,
@@ -63,8 +64,12 @@ export default function Page() {
 		if (apis?.data) setApis(apis.data);
 	}
 
+	const navigationStore = useNavigationStore();
+
 	useEffect(() => {
 		loadApis().finally(() => setIsLoading(false));
+
+		navigationStore.setCurrentPage("API List");
 	}, []);
 
 	const filteredApis = apis.filter((arg) =>

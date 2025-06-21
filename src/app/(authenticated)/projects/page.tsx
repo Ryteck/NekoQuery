@@ -19,6 +19,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useNavigationStore } from "@/stores/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	FolderRootIcon,
@@ -28,6 +29,7 @@ import {
 } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -59,6 +61,12 @@ export default function Page() {
 
 		if (project?.data) router.push(`/projects/${project.data.id}`);
 	}
+
+	const navigationStore = useNavigationStore();
+
+	useEffect(() => {
+		navigationStore.setCurrentPage("Create New Project");
+	}, []);
 
 	return (
 		<Card className="mx-auto w-full lg:max-w-[480px]">

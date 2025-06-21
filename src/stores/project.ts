@@ -3,11 +3,24 @@ import { create } from "zustand";
 
 interface ProjectState {
 	project: null | ShowProjectByIdReturn;
-	setProjet: (project: ShowProjectByIdReturn) => void;
 }
 
-export const useProjectStore = create<ProjectState>()((set) => ({
+const projectInitialState: ProjectState = {
 	project: null,
+};
 
-	setProjet: (project) => set({ project }),
+interface ProjectActions {
+	reset: () => void;
+
+	setProject: (project: ShowProjectByIdReturn) => void;
+}
+
+type ProjectStore = ProjectState & ProjectActions;
+
+export const useProjectStore = create<ProjectStore>()((set) => ({
+	...projectInitialState,
+
+	reset: () => set({ ...projectInitialState }),
+
+	setProject: (project) => set({ project }),
 }));

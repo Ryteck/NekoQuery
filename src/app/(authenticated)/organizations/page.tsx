@@ -19,9 +19,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { useNavigationStore } from "@/stores/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building, LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import slug from "slug";
 import { toast } from "sonner";
@@ -67,6 +69,12 @@ export default function Page() {
 
 		router.push("/dashboard");
 	}
+
+	const navigationStore = useNavigationStore();
+
+	useEffect(() => {
+		navigationStore.setCurrentPage("Create New Organization");
+	}, []);
 
 	return (
 		<Card className="mx-auto w-full lg:max-w-[480px]">

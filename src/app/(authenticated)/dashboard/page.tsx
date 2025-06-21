@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { ProjectData } from "@/db/schema/project";
+import { useNavigationStore } from "@/stores/navigation";
 import {
 	ArrowRightIcon,
 	EllipsisIcon,
@@ -64,8 +65,11 @@ export default function Page() {
 		if (projects?.data) setProjects(projects.data);
 	}
 
+	const navigationStore = useNavigationStore();
+
 	useEffect(() => {
 		loadProjects().finally(() => setIsLoading(false));
+		navigationStore.setCurrentPage("Dashboard");
 	}, []);
 
 	const filteredProjects = projects.filter((arg) =>

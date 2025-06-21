@@ -19,6 +19,7 @@ import {
 	LayoutDashboardIcon,
 	LogOutIcon,
 	LogsIcon,
+	type LucideIcon,
 	PlusIcon,
 	SettingsIcon,
 	SparklesIcon,
@@ -59,8 +60,14 @@ import { ThemeModeToggleComponent } from "../theme-mode-toggle";
 import { ScrollArea } from "../ui/scroll-area";
 import { UserAvatarComponent } from "../user-avatar";
 
+interface MenuItems {
+	title: string;
+	url: string;
+	icon: LucideIcon;
+}
+
 // Menu items.
-const menuItems = [
+const menuItems: MenuItems[] = [
 	{
 		title: "Home",
 		url: "/",
@@ -89,7 +96,7 @@ const menuItems = [
 ];
 
 // Project Menu Items
-const projectMenuItems = [
+const projectMenuItems: MenuItems[] = [
 	{
 		title: "Project",
 		url: "",
@@ -143,7 +150,7 @@ const projectMenuItems = [
 ];
 
 // Menu items.
-const footerItems = [
+const footerItems: MenuItems[] = [
 	{
 		title: "Account",
 		url: "/account",

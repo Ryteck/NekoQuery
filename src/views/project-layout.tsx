@@ -15,7 +15,7 @@ export function ProjectLayoutView({
 	const projectStore = useProjectStore();
 
 	useEffect(() => {
-		projectStore.setProjet(project);
+		projectStore.setProject(project);
 	}, [project]);
 
 	return children;
