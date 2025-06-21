@@ -26,6 +26,7 @@ import {
 	GalleryVerticalEndIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { Fragment } from "react";
 
 export function NavigationLoadedComponent() {
 	const { isMobile } = useSidebar();
@@ -123,6 +124,18 @@ export function NavigationLoadedComponent() {
 							<BreadcrumbSeparator className="hidden md:block" />
 						</>
 					)}
+
+					{navigationStore.subPages?.map((arg) => (
+						<Fragment key={arg.title}>
+							<BreadcrumbItem className="hidden md:block">
+								<BreadcrumbLink asChild>
+									<Link href={arg.url}>{arg.title}</Link>
+								</BreadcrumbLink>
+							</BreadcrumbItem>
+
+							<BreadcrumbSeparator className="hidden md:block" />
+						</Fragment>
+					))}
 
 					{navigationStore.currentPage && (
 						<BreadcrumbItem>

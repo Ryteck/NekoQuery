@@ -6,6 +6,14 @@ export async function listApisByUserId(userId: string): Promise<ApiData[]> {
 	return db.select().from(api).where(eq(api.userId, userId));
 }
 
+export async function showApiById(id: string): Promise<ApiData> {
+	const selected = await db.select().from(api).where(eq(api.id, id));
+
+	if (selected.length === 0) throw new Error("Api not found");
+
+	return selected[0];
+}
+
 export async function createNewApi({
 	name,
 	baseUrl,

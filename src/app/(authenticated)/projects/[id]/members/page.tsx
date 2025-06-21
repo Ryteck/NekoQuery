@@ -20,12 +20,22 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { UserAvatarComponent } from "@/components/user-avatar";
+import { useNavigationStore } from "@/stores/navigation";
 import { useProjectStore } from "@/stores/project";
 import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Page() {
 	const projectStore = useProjectStore();
 	const project = projectStore.project;
+
+	const navigationStore = useNavigationStore();
+	const pathname = usePathname();
+
+	useEffect(() => {
+		navigationStore.setCurrentPage("Members");
+	}, [pathname]);
 
 	return (
 		<Card>

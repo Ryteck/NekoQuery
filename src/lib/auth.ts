@@ -24,3 +24,6 @@ export const auth = betterAuth({
 });
 
 export type BetterAuthSession = typeof auth.$Infer.Session;
+export type BetterAuthOrganization = typeof auth.$Infer.Organization;
+export type BetterAuthMember = typeof auth.$Infer.Member;
+export type BetterAuthInvitation = typeof auth.$Infer.Invitation;
