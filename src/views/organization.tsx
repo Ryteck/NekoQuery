@@ -30,10 +30,11 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { UserAvatarComponent } from "@/components/user-avatar";
-import type {
-	BetterAuthInvitation,
-	BetterAuthMember,
-	BetterAuthOrganization,
+import {
+	type BetterAuthInvitation,
+	type BetterAuthMember,
+	type BetterAuthOrganization,
+	authClient,
 } from "@/lib/auth-client";
 import { useNavigationStore } from "@/stores/navigation";
 import { EllipsisIcon, ExternalLinkIcon } from "lucide-react";
@@ -61,6 +62,8 @@ export function OrganizationView({ organization }: Props) {
 		]);
 
 		navigationStore.setCurrentPage(organization.name);
+
+		authClient.organization.setActive({ organizationId: organization.id });
 	}, [pathname]);
 
 	return (

@@ -225,7 +225,7 @@ export function SidebarLoadedComponent({ session }: Props) {
 								sideOffset={4}
 							>
 								<DropdownMenuLabel className="text-muted-foreground text-xs">
-									Organizations
+									Select another organization
 								</DropdownMenuLabel>
 
 								{activeOrganization.data && (

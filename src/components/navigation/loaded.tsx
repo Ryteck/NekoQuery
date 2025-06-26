@@ -21,11 +21,14 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
 import { useNavigationStore } from "@/stores/navigation";
 import {
+	BuildingIcon,
 	ChevronDownIcon,
 	CommandIcon,
 	GalleryVerticalEndIcon,
+	ListIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 
 export function NavigationLoadedComponent() {
@@ -35,6 +38,8 @@ export function NavigationLoadedComponent() {
 
 	const organizations = authClient.useListOrganizations();
 	const activeOrganization = authClient.useActiveOrganization();
+
+	const router = useRouter();
 
 	return (
 		<div className="flex items-center gap-2 mb-4">
@@ -65,7 +70,9 @@ export function NavigationLoadedComponent() {
 							<BreadcrumbItem className="hidden md:block">
 								<DropdownMenu>
 									<DropdownMenuTrigger className="flex items-center gap-1 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5">
-										Organizations
+										{organizations.isPending || !activeOrganization.data
+											? "Personal environment"
+											: activeOrganization.data?.name}
 										<ChevronDownIcon />
 									</DropdownMenuTrigger>
 
@@ -75,8 +82,36 @@ export function NavigationLoadedComponent() {
 										side={isMobile ? "bottom" : "right"}
 										sideOffset={4}
 									>
+										{activeOrganization.data && (
+											<DropdownMenuItem
+												className="gap-2 p-2"
+												onClick={() => {
+													router.push(
+														`/organizations/${activeOrganization.data?.slug}`,
+													);
+												}}
+											>
+												<div className="flex size-6 items-center justify-center rounded-md border">
+													<BuildingIcon className="size-3.5 shrink-0" />
+												</div>
+												Go to organizations page
+											</DropdownMenuItem>
+										)}
+
+										<DropdownMenuItem
+											className="gap-2 p-2"
+											onClick={() => {
+												router.push("/organizations/list");
+											}}
+										>
+											<div className="flex size-6 items-center justify-center rounded-md border">
+												<ListIcon className="size-3.5 shrink-0" />
+											</div>
+											Go to organizations list
+										</DropdownMenuItem>
+
 										<DropdownMenuLabel className="text-muted-foreground text-xs">
-											Organizations
+											Select another organization
 										</DropdownMenuLabel>
 
 										{activeOrganization.data && (

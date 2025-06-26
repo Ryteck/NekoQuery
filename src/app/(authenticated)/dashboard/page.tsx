@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import type { ProjectData } from "@/db/schema/project";
+import { getDiffInHoursText } from "@/lib/utils";
 import { useNavigationStore } from "@/stores/navigation";
 import {
 	ArrowRightIcon,
@@ -219,7 +220,7 @@ export default function Page() {
 								<p className="w-full">qwerty</p>
 
 								<p className="w-full flex gap-1 items-center">
-									xh ago on
+									{getDiffInHoursText(arg.createdAt)} on{" "}
 									<GitMergeIcon size={16} />
 									main
 								</p>
