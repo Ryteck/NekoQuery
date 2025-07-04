@@ -1,4 +1,4 @@
-import { getWebContainerInstance } from "@/lib/web-container";
+import { useWebContainerStore } from "@/stores/webContainer";
 import { NodeViewWrapper } from "@tiptap/react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import ANSIToHTML from "ansi-to-html";
@@ -19,10 +19,12 @@ export function WebContainerEditor() {
 	const [output, setOutput] = useState<string[]>([]);
 	const [isRunning, setIsRunning] = useState(false);
 
+	const webContainerStore = useWebContainerStore();
+
 	async function handleEvaluateCode() {
 		setIsRunning(true);
 
-		const webContainer = await getWebContainerInstance();
+		const webContainer = await webContainerStore.getInstance();
 
 		await webContainer.mount({
 			"index.js": {
