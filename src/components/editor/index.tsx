@@ -16,7 +16,7 @@ export function EditorComponent() {
 	const editor = useEditor({
 		editorProps: {
 			attributes: {
-				class: "prose prose-invert outline-none max-w-none w-full",
+				class: "prose dark:prose-invert outline-none max-w-none w-full",
 			},
 		},
 		extensions: [
